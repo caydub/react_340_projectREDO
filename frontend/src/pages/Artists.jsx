@@ -1,25 +1,22 @@
 import { useState, useEffect } from 'react';  // Importing useState for managing state in the component
 import TableRow from '../components/TableRow';
-import CreateAlbumForm from '../components/AlbumComponents/CreateAlbumForm';
+import CreateArtistForm from '../components/ArtistComponents/CreateArtistForm';
 
-function Albums({ backendURL }) {
+function Artists({ backendURL }) {
 
-    // Set up a state variable `albums` to store and display the backend response
-    const [albums, setAlbums] = useState([]);
-    const [genres, setGenres] = useState([]);
-
+    // Set up a state variable `artists` to store and display the backend response
+    const [artists, setArtists] = useState([]);
 
     const getData = async function () {
         try {
             // Make a GET request to the backend
-            const response = await fetch(backendURL + '/Albums');
+            const response = await fetch(backendURL + '/Artists');
 
             // Convert the response into JSON format
-            const { albums, genres } = await response.json();
+            const { artists } = await response.json();
 
-            // Update the albums state with the response data
-            setAlbums(albums);
-            setGenres(genres);
+            // Update the artists state with the response data
+            setArtists(artists);
 
         } catch (error) {
             // If the API call fails, print the error to the console
@@ -35,12 +32,12 @@ function Albums({ backendURL }) {
 
     return (
         <>
-            <h1>Albums</h1>
+            <h1>Artists</h1>
 
             <table>
                 <thead>
                     <tr>
-                        {albums.length > 0 && Object.keys(albums[0]).map((header, index) => (
+                        {artists.length > 0 && Object.keys(artists[0]).map((header, index) => (
                             <th key={index}>{header}</th>
                         ))}
                         <th></th>
@@ -49,15 +46,15 @@ function Albums({ backendURL }) {
                 </thead>
 
                 <tbody>
-                    {albums.map((album, index) => (
-                        <TableRow key={index} rowObject={album} backendURL={backendURL} refreshAlbums={getData} />
+                    {artists.map((artist, index) => (
+                        <TableRow key={index} rowObject={artist} backendURL={backendURL} refreshArtists={getData} />
                     ))}
 
                 </tbody>
             </table>
 
-            <CreateAlbumForm genres={genres} backendURL={backendURL} refreshAlbums={getData} />
+            <CreateArtistForm backendURL={backendURL} refreshArtists={getData} />
         </>
     );
 
-} export default Albums;
+} export default Artists;

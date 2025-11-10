@@ -7,7 +7,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // Valid ports = 1024 < PORT < 65535
-const PORT = 6776;
+const PORT = 6896;
 
 // ########################################
 // ########## ROUTE HANDLERS

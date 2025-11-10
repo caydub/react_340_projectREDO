@@ -1,10 +1,10 @@
-const DeleteAlbumForm = ({ rowObject, backendURL, refreshAlbums }) => {
+const GenericUpdateButton = ({ rowObject, backendURL, refreshRows }) => {
 
     return (
         <td>
             <form>
                 <button type='submit'>
-                    Delete
+                    Update
                 </button>
             </form>
         </td>
@@ -12,4 +12,4 @@ const DeleteAlbumForm = ({ rowObject, backendURL, refreshAlbums }) => {
     );
 };
 
-export default DeleteAlbumForm;
+export default GenericUpdateButton;

@@ -15,17 +15,17 @@ function BSGPeople({ backendURL }) {
         try {
             // Make a GET request to the backend
             const response = await fetch(backendURL + '/bsg-people');
-            
+
             // Convert the response into JSON format
-            const {people, homeworlds} = await response.json();
-    
+            const { people, homeworlds } = await response.json();
+
             // Update the people state with the response data
             setPeople(people);
             setHomeworlds(homeworlds);
-            
+
         } catch (error) {
-          // If the API call fails, print the error to the console
-          console.log(error);
+            // If the API call fails, print the error to the console
+            console.log(error);
         }
 
     };
@@ -51,14 +51,14 @@ function BSGPeople({ backendURL }) {
 
                 <tbody>
                     {people.map((person, index) => (
-                        <TableRow key={index} rowObject={person} backendURL={backendURL} refreshPeople={getData}/>
+                        <TableRow key={index} rowObject={person} backendURL={backendURL} refreshPeople={getData} />
                     ))}
 
                 </tbody>
             </table>
-            
+
             <CreatePersonForm homeworlds={homeworlds} backendURL={backendURL} refreshPeople={getData} />
-            <UpdatePersonForm people={people} homeworlds={homeworlds} backendURL={backendURL} refreshPeople={getData} />               
+            <UpdatePersonForm people={people} homeworlds={homeworlds} backendURL={backendURL} refreshPeople={getData} />
         </>
     );
 
