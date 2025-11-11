@@ -1,0 +1,60 @@
+import { useState, useEffect } from 'react';  // Importing useState for managing state in the component
+import TableRow from '../components/TableRow';
+import CreateAlbumRatingForm from "../components/AlbumRatingComponents/CreateAlbumRatingForm.jsx";
+
+function AlbumRatings({ backendURL }) {
+
+    // Set up a state variable `sales` to store and display the backend response
+    const [albumratings, setAlbumRatings] = useState([]);
+
+    const getData = async function () {
+        try {
+            // Make a GET request to the backend
+            const response = await fetch(backendURL + '/AlbumRatings');
+
+            // Convert the response into JSON format
+            const { albumratings } = await response.json();
+
+            // Update the sales state with the response data
+            setAlbumRatings(albumratings);
+
+        } catch (error) {
+            // If the API call fails, print the error to the console
+            console.log(error);
+        }
+
+    };
+
+    // Load table on page load
+    useEffect(() => {
+        getData();
+    }, []);
+
+    return (
+        <>
+            <h1>Album Ratings</h1>
+
+            <table>
+                <thead>
+                <tr>
+                    {albumratings.length > 0 && Object.keys(albumratings[0]).map((header, index) => (
+                        <th key={index}>{header}</th>
+                    ))}
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    {albumratings.map((sale, index) => (
+                        <TableRow key={index} rowObject={sale} backendURL={backendURL} refreshAlbumRatings={getData} />
+                    ))}
+
+                </tbody>
+            </table>
+
+            <CreateAlbumRatingForm backendURL={backendURL} refreshAlbumRatings={getData} />
+        </>
+    );
+
+} export default AlbumRatings;

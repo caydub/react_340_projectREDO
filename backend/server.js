@@ -88,6 +88,54 @@ app.get('/Sales', async (req, res) => {
 
 });
 
+app.get('/Customers', async (req, res) => {
+    try {
+        const viewCustomers = `SELECT customerID,
+        CONCAT(firstName, ' ', lastName) AS customer, phoneNumber, email
+        FROM Customers;`;
+        const [customers] = await db.query(viewCustomers);
+        res.status(200).json({ customers });
+
+    } catch (error) {
+        console.error("Error executing queries:", error);
+        res.status(500).send("An error occurred while executing the database queries.");
+    }
+});
+
+app.get('/AlbumRatings', async (req, res) => {
+    try {
+        const viewAlbumRatings = `
+        SELECT albumRatingID, albumRating, albumID, 
+        CONCAT(Customers.firstName, ' ', Customers.lastName) AS customer
+        FROM AlbumRatings
+        INNER JOIN Customers ON AlbumRatings.customerID = Customers.customerID
+        ORDER BY customer;`;
+
+        const [albumRatings] = await db.query(viewAlbumRatings);
+        res.status(200).json({ albumRatings });
+
+    } catch (error) {
+        console.error("Error executing AlbumRatings query:", error);
+        res.status(500).send("An error occurred while retrieving Album Ratings.");
+    }
+});
+
+app.get('/LineItems', async (req, res) => {
+    try {
+        const viewLineItems = `SELECT salesID, 
+        CONCAT(Customers.firstName, ' ', Customers.lastName) AS customer, totalCost, purchaseDate
+        FROM Sales
+        INNER JOIN Customers ON Sales.customerID = Customers.customerID;`;
+
+        const [lineItems] = await db.query(viewLineItems);
+        res.status(200).json({ lineItems });
+
+    } catch (error) {
+        console.error("Error executing LineItems query:", error);
+        res.status(500).send("An error occurred while retrieving Line Items.");
+    }
+});
+
 // ########################################
 // ########## LISTENER
 

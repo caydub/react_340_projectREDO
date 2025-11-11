@@ -7,7 +7,9 @@ import Albums from './pages/Albums';
 import Artists from './pages/Artists';
 import Genres from './pages/Genres';
 import Sales from './pages/Sales';
-
+import Customers from './pages/Customers';
+import AlbumRatings from "./pages/AlbumRatings.jsx";
+import LineItems from "./pages/LineItems.jsx";
 // Components
 import Navigation from './components/Navigation';
 
@@ -26,6 +28,9 @@ function App() {
                 <Route path="/artists" element={<Artists backendURL={backendURL} />} />
                 <Route path="/genres" element={<Genres backendURL={backendURL} />} />
                 <Route path="/sales" element={<Sales backendURL={backendURL} />} />
+                <Route path="/customers" element={<Customers backendURL={backendURL} />} />
+                <Route path="/albumratings" element={<AlbumRatings backendURL={backendURL} />} />
+                <Route path="/lineitems" element={<LineItems backendURL={backendURL} />} />
             </Routes>
         </>
     );
