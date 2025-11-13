@@ -1,7 +1,6 @@
-/* ================================
-   80s Record Store Theme
-================================ */
-
+/* Used chatgpt to give a basic template for a index.css style sheet
+Modified it to our liking with colors and styles and fonts.
+ */
 /* Reset & body */
 body {
     font-family: 'Courier New', 'Lucida Console', monospace; /* digital/arcade 80s font */
@@ -147,9 +146,7 @@ small {
     color: #888;
 }
 
-/* ================================
-   Navigation Bar - 80s Neon
-================================ */
+/* Navigation Bar - 80s Neon */
 nav {
     display: flex;
     gap: 20px;
@@ -167,9 +164,7 @@ nav {
 nav a {
     color: #FF00FF;
 }
-/* ================================
-   80s/90s Retro Background
-================================ */
+/* 80s/90s Retro Background */
 
 body {
     position: relative;
