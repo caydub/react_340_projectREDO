@@ -46,8 +46,8 @@ function Customers({ backendURL }) {
                 </thead>
 
                 <tbody>
-                    {customers.map((sale, index) => (
-                        <TableRow key={index} rowObject={customers} backendURL={backendURL} refreshCustomers={getData} />
+                    {customers.map((customer, index) => (
+                        <TableRow key={index} rowObject={customer} backendURL={backendURL} refreshCustomers={getData} />
                     ))}
 
                 </tbody>

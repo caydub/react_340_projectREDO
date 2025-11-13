@@ -37,7 +37,7 @@ function AlbumRatings({ backendURL }) {
             <table>
                 <thead>
                 <tr>
-                    {albumratings.length > 0 && Object.keys(albumratings[0]).map((header, index) => (
+                    {albumRatings.length > 0 && Object.keys(albumRatings[0]).map((header, index) => (
                         <th key={index}>{header}</th>
                     ))}
                     <th></th>
@@ -46,8 +46,8 @@ function AlbumRatings({ backendURL }) {
                 </thead>
 
                 <tbody>
-                    {albumratings.map((sale, index) => (
-                        <TableRow key={index} rowObject={sale} backendURL={backendURL} refreshAlbumRatings={getData} />
+                    {albumRatings.map((rating, index) => (
+                        <TableRow key={index} rowObject={rating} backendURL={backendURL} refreshAlbumRatings={getData} />
                     ))}
 
                 </tbody>

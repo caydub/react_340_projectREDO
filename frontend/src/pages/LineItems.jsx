@@ -46,8 +46,8 @@ function LineItems({ backendURL }) {
                 </thead>
 
                 <tbody>
-                {lineItems .map((sale, index) => (
-                    <TableRow key={index} rowObject={lineItems } backendURL={backendURL} refreshLineItems={getData} />
+                {lineItems .map((lineItem, index) => (
+                    <TableRow key={index} rowObject={lineItem} backendURL={backendURL} refreshLineItems={getData} />
                 ))}
 
                 </tbody>
