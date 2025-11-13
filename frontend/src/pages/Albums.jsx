@@ -50,7 +50,7 @@ function Albums({ backendURL }) {
 
                 <tbody>
                     {albums.map((album, index) => (
-                        <TableRow key={index} rowObject={album} backendURL={backendURL} refreshAlbums={getData} />
+                        <TableRow key={index} rowObject={album} backendURL={backendURL} refreshRows={getData} />
                     ))}
 
                 </tbody>
