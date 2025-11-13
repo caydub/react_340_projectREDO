@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';  // Importing useState for managing state in the component
 import TableRow from '../components/TableRow';
-import CreateAlbumRatingForm from "../components/AlbumRatingComponents/CreateAlbumRatingForm.jsx";
+import CreateAlbumRatingsForm from "../components/AlbumRatingsComponents/CreateAlbumRatingsForm.jsx";
 
 function AlbumRatings({ backendURL }) {
 
     // Set up a state variable `sales` to store and display the backend response
-    const [albumratings, setAlbumRatings] = useState([]);
+    const [albumRatings, setAlbumRatings] = useState([]);
 
     const getData = async function () {
         try {
@@ -13,10 +13,10 @@ function AlbumRatings({ backendURL }) {
             const response = await fetch(backendURL + '/AlbumRatings');
 
             // Convert the response into JSON format
-            const { albumratings } = await response.json();
+            const { albumRatings } = await response.json();
 
             // Update the sales state with the response data
-            setAlbumRatings(albumratings);
+            setAlbumRatings(albumRatings);
 
         } catch (error) {
             // If the API call fails, print the error to the console
@@ -53,7 +53,7 @@ function AlbumRatings({ backendURL }) {
                 </tbody>
             </table>
 
-            <CreateAlbumRatingForm backendURL={backendURL} refreshAlbumRatings={getData} />
+            <CreateAlbumRatingsForm backendURL={backendURL} refreshAlbumRatings={getData} />
         </>
     );
 

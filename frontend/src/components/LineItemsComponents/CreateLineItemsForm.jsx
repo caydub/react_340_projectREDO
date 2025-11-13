@@ -1,4 +1,4 @@
-const CreateLineItemForm = ({ backendURL, refreshAlbums }) => {
+const CreateLineItemsForm = ({ backendURL, refreshLineItems }) => {
 
     return (
         <>
@@ -29,4 +29,4 @@ const CreateLineItemForm = ({ backendURL, refreshAlbums }) => {
     );
 };
 
-export default CreateLineItemForm;
+export default CreateLineItemsForm;

@@ -1,22 +1,22 @@
 import { useState, useEffect } from 'react';  // Importing useState for managing state in the component
 import TableRow from '../components/TableRow';
-import CreateLineItemForm from "../components/LineItemComponents/CreateLineItemForm.jsx";
+import CreateLineItemsForm from "../components/LineItemsComponents/CreateLineItemsForm.jsx";
 
-function LineItem({ backendURL }) {
+function LineItems({ backendURL }) {
 
     // Set up a state variable `sales` to store and display the backend response
-    const [lineitem, setLineItem] = useState([]);
+    const [lineItems , setLineItems] = useState([]);
 
     const getData = async function () {
         try {
             // Make a GET request to the backend
-            const response = await fetch(backendURL + '/Lineitem');
+            const response = await fetch(backendURL + '/LineItems');
 
             // Convert the response into JSON format
-            const { lineitem } = await response.json();
+            const { lineItems  } = await response.json();
 
             // Update the sales state with the response data
-            setLineItem(lineitem);
+            setLineItems(lineItems );
 
         } catch (error) {
             // If the API call fails, print the error to the console
@@ -37,7 +37,7 @@ function LineItem({ backendURL }) {
             <table>
                 <thead>
                 <tr>
-                    {lineitem.length > 0 && Object.keys(lineitem[0]).map((header, index) => (
+                    {lineItems .length > 0 && Object.keys(lineItems [0]).map((header, index) => (
                         <th key={index}>{header}</th>
                     ))}
                     <th></th>
@@ -46,15 +46,15 @@ function LineItem({ backendURL }) {
                 </thead>
 
                 <tbody>
-                {lineitem.map((sale, index) => (
-                    <TableRow key={index} rowObject={lineitem} backendURL={backendURL} refreshLineItems={getData} />
+                {lineItems .map((sale, index) => (
+                    <TableRow key={index} rowObject={lineItems } backendURL={backendURL} refreshLineItems={getData} />
                 ))}
 
                 </tbody>
             </table>
 
-            <CreateLineItemForm backendURL={backendURL} refreshLineItems={getData} />
+            <CreateLineItemsForm backendURL={backendURL} refreshLineItems={getData} />
         </>
     );
 
-} export default LineItem;
+} export default LineItems;

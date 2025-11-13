@@ -1,4 +1,4 @@
-const CreateCustomerForm = ({ backendURL, refreshCustomers }) => {
+const CreateCustomersForm = ({ backendURL, refreshCustomers }) => {
 
     return (
         <>
@@ -35,4 +35,4 @@ const CreateCustomerForm = ({ backendURL, refreshCustomers }) => {
     );
 };
 
-export default CreateCustomerForm;
+export default CreateCustomersForm;

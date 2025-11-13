@@ -1,22 +1,22 @@
 import { useState, useEffect } from 'react';  // Importing useState for managing state in the component
 import TableRow from '../components/TableRow';
-import CreateCustomerForm from "../components/CustomerComponents/CreateCustomerForm.jsx";
+import CreateCustomersForm from "../components/CustomersComponents/CreateCustomersForm.jsx";
 
-function Customer({ backendURL }) {
+function Customers({ backendURL }) {
 
     // Set up a state variable `sales` to store and display the backend response
-    const [customer, setCustomer] = useState([]);
+    const [customers, setCustomers] = useState([]);
 
     const getData = async function () {
         try {
             // Make a GET request to the backend
-            const response = await fetch(backendURL + '/Customer');
+            const response = await fetch(backendURL + '/Customers');
 
             // Convert the response into JSON format
-            const { customer } = await response.json();
+            const { customers } = await response.json();
 
             // Update the sales state with the response data
-            setCustomer(customer);
+            setCustomers(customers);
 
         } catch (error) {
             // If the API call fails, print the error to the console
@@ -32,12 +32,12 @@ function Customer({ backendURL }) {
 
     return (
         <>
-            <h1>Customer</h1>
+            <h1>Customers</h1>
 
             <table>
                 <thead>
                     <tr>
-                        {customer.length > 0 && Object.keys(customer[0]).map((header, index) => (
+                        {customers.length > 0 && Object.keys(customers[0]).map((header, index) => (
                             <th key={index}>{header}</th>
                         ))}
                         <th></th>
@@ -46,15 +46,15 @@ function Customer({ backendURL }) {
                 </thead>
 
                 <tbody>
-                    {customer.map((sale, index) => (
-                        <TableRow key={index} rowObject={customer} backendURL={backendURL} refreshCustomers={getData} />
+                    {customers.map((sale, index) => (
+                        <TableRow key={index} rowObject={customers} backendURL={backendURL} refreshCustomers={getData} />
                     ))}
 
                 </tbody>
             </table>
 
-            <CreateCustomerForm backendURL={backendURL} refreshCustomers={getData} />
+            <CreateCustomersForm backendURL={backendURL} refreshCustomers={getData} />
         </>
     );
 
-} export default Customer;
+} export default Customers;

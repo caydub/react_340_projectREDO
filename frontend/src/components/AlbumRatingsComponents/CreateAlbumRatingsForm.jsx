@@ -1,8 +1,8 @@
-const CreateAlbumRatingForm = ({ backendURL, refreshAlbums }) => {
+const CreateAlbumRatingsForm = ({ backendURL, refreshAlbumRatings }) => {
 
     return (
         <>
-            <h2>Create a Line Item</h2>
+            <h2>Create an Album Rating</h2>
 
             <form className='cuForm'>
                 <label htmlFor="create_album_name">Album Name: </label>
@@ -19,7 +19,7 @@ const CreateAlbumRatingForm = ({ backendURL, refreshAlbums }) => {
                 />
                 <label htmlFor="create_album_rating">Album Rating: </label>
                 <input
-                    type="decimal"
+                    type="number"
                     name="create_album_rating"
                     id="create_album_rating"
                 />
@@ -29,4 +29,4 @@ const CreateAlbumRatingForm = ({ backendURL, refreshAlbums }) => {
     );
 };
 
-export default CreateAlbumRatingForm;
+export default CreateAlbumRatingsForm;
