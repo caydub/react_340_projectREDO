@@ -123,7 +123,7 @@ app.get('/AlbumRatings', async (req, res) => {
 app.get('/LineItems', async (req, res) => {
     try {
         const viewLineItems = `SELECT salesID, 
-        CONCAT(Customers.firstName, ' ', Customers.lastName) AS customer, totalCost, purchaseDate
+        CONCAT(Customers.firstName, ' ', Customers.lastName) AS customer, totalCost, DATE_FORMAT(purchaseDate, '%Y-%m-%d') AS purchaseDate
         FROM Sales
         INNER JOIN Customers ON Sales.customerID = Customers.customerID;`;
 
