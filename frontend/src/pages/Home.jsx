@@ -3,7 +3,8 @@ import '/Home.css'; // Import your CSS file
 function Home() {
     return (
         <>
-            <h1>Home page</h1>
+            <h1>Welcome to Group 60's Project!</h1>
+            <h2>Album Ranking and Sales Database Management System</h2>
             <div className="homepageDescription">
                 <p>Caleb Richter</p>
                 <p> &</p>

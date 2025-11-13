@@ -122,10 +122,8 @@ app.get('/AlbumRatings', async (req, res) => {
 
 app.get('/LineItems', async (req, res) => {
     try {
-        const viewLineItems = `SELECT salesID, 
-        CONCAT(Customers.firstName, ' ', Customers.lastName) AS customer, totalCost, DATE_FORMAT(purchaseDate, '%Y-%m-%d') AS purchaseDate
-        FROM Sales
-        INNER JOIN Customers ON Sales.customerID = Customers.customerID;`;
+        const viewLineItems = `SELECT lineItemID, salesID, albumID, albumPrice, \
+        quantity, quantity * albumPrice AS lineItemTotal FROM LineItems;`;
 
         const [lineItems] = await db.query(viewLineItems);
         res.status(200).json({ lineItems });
