@@ -1,14 +1,232 @@
-h1, h2 { margin-left: 16px;}
-table {border-collapse: collapse;margin-left: 32px;}
-th, td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: center;
+/* ================================
+   80s Record Store Theme
+================================ */
+
+/* Reset & body */
+body {
+    font-family: 'Courier New', 'Lucida Console', monospace; /* digital/arcade 80s font */
+    margin: 0;
+    padding: 0;
+    background-color: rgb(40, 40, 40); /* dark background for neon pop */
+    color: #F0F0F0; /* light text */
 }
-th {background-color: #f2f2f2;}
-tr:nth-child(even) {background-color: #f9f9f9;}
-.cuForm { margin-left: 32px;}
-input, select { margin-bottom: 4px;margin-right: 12px;}
-nav {background-color: #cecece;padding: 16px;}
-a {margin-left: 16px;}
-.homepageDescription {margin-left: 32px;}
+
+h1, h2, h3 {
+    color: #FF00FF; /* bright magenta headers */
+    margin-bottom: 16px;
+    text-shadow: 2px 2px #00FFFF; /* neon glow effect */
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.4rem;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+}
+
+/* Links */
+a {
+    color: #00FFFF; /* neon cyan links */
+    text-decoration: none;
+}
+
+a:hover {
+    color: #FF00FF; /* neon magenta hover */
+    text-shadow: 1px 1px #00FFFF;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    margin-bottom: 30px;
+    background-color: rgba(27, 27, 27, 0.43); /* dark table background */
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+thead {
+    background: linear-gradient(90deg, #FF00FF, #00FFFF); /* neon gradient headers */
+    color: rgba(18, 18, 18, 0.58);
+    font-weight: bold;
+    font-size: 2rem;
+    text-shadow: 1px 1px #000;
+}
+
+th, td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #444;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+tr:nth-child(even) {
+    background-color: #1E1E1E;
+}
+
+/* Buttons */
+button, .button {
+    padding: 6px 14px;
+    border: 2px solid #FF00FF;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    transition: all 0.2s ease;
+    color: #FFF;
+    background-color: #121212;
+    box-shadow: 0 0 5px #FF00FF, 0 0 10px #00FFFF;
+}
+
+/* Hover: increase glow */
+button:hover, .button:hover {
+    box-shadow:
+            0 0 10px #FF00FF,
+            0 0 20px #00FFFF,
+            0 0 30px #FF00FF,
+            0 0 40px #00FFFF;
+}
+
+button.delete, .button.delete {
+    background-color: #FF00FF;
+    color: #121212;
+}
+
+button.delete:hover, .button.delete:hover {
+    background-color: #FF66FF;
+}
+
+button.update, .button.update {
+    background-color: #00FFFF;
+    color: #121212;
+}
+
+button.update:hover, .button.update:hover {
+    background-color: #66FFFF;
+}
+
+button.create, .button.create {
+    background-color: #FF9900;
+    color: #121212;
+}
+
+button.create:hover, .button.create:hover {
+    background-color: #FFCC33;
+}
+
+/* Forms */
+input, select {
+    padding: 6px 10px;
+    margin: 0 4px;
+    border: 2px solid #00FFFF;
+    border-radius: 4px;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    background-color: #1B1B1B;
+    color: #FFF;
+}
+
+form {
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Container / Page layout */
+.App {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Misc */
+small {
+    color: #888;
+}
+
+/* ================================
+   Navigation Bar - 80s Neon
+================================ */
+nav {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    padding: 14px 0;
+    background-color: #121212;
+    font-family: 'Courier New', monospace;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    box-shadow: 0 0 15px #FF00FF, 0 0 20px #00FFFF;
+    margin-bottom: 30px;
+}
+
+nav a {
+    color: #FF00FF;
+}
+/* ================================
+   80s/90s Retro Background
+================================ */
+
+body {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    font-family: 'Courier New', monospace;
+    background-color: #121212;
+
+    /* Base repeating neon grid */
+    background-image: url('frontend/src/assets/bluevinyl.jpg');
+    background-repeat: repeat;
+    background-size: auto;
+    z-index: 0;
+}
+
+/* Overlay shapes and subtle graphics */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('frontend/src/assets/bluevinyl.jpg'), url('frontend/src/assets/bluevinyl.jpg');
+    background-repeat: repeat, no-repeat;
+    background-position: center center, bottom right;
+    background-size: contain, 150px;
+    opacity: 0.15;
+    pointer-events: none; /* so content is clickable */
+    z-index: 0;
+}
+
+/* Optional animated gradient overlay */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, #FF00FF, #00FFFF, #FF9900);
+    background-size: 600% 600%;
+    animation: gradientShift 20s ease infinite;
+    opacity: 0.05; /* subtle */
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Ensure main app content is above background */
+.App {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
