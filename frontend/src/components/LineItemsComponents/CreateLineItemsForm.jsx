@@ -11,11 +11,17 @@ const CreateLineItemsForm = ({ backendURL, refreshLineItems }) => {
                     name="create_salesID"
                     id="create_salesID"
                 />
-                <label htmlFor="create_album_name">Album Name: </label>
+                <label htmlFor="create_album_name">Album: </label>
                 <input
                     type="text"
                     name="create_album_name"
                     id="create_album_name"
+                />
+                <label htmlFor="create_album_price">Album Price: </label>
+                <input
+                    type="number"
+                    name="create_album_price"
+                    id="create_album_price"
                 />
                 <label htmlFor="create_quantity">Quantity: </label>
                 <input
@@ -23,7 +29,7 @@ const CreateLineItemsForm = ({ backendURL, refreshLineItems }) => {
                     name="create_quantity"
                     id="create_quantity"
                 />
-                <input type="submit"/>
+                <input type="submit" />
             </form>
         </>
     );

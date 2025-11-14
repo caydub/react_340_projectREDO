@@ -4,7 +4,7 @@ function Home() {
     return (
         <>
             <h1>Welcome to Group 60's Project!</h1>
-            <h2>Album Ranking and Sales Database Management System</h2>
+            <h1>Album Ranking and Sales Database Management System</h1>
             <div className="homepageDescription">
                 <p>Caleb Richter</p>
                 <p> &</p>

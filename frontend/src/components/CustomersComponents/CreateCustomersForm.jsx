@@ -17,19 +17,19 @@ const CreateCustomersForm = ({ backendURL, refreshCustomers }) => {
                     name="create_customer_lastname"
                     id="create_customer_lastname"
                 />
-                <label htmlFor="create_customer_phonenumber">Customer Phone Number: </label>
+                <label htmlFor="create_customer_phonenumber">Phone Number: </label>
                 <input
                     type="text"
                     name="create_customer_phonenumber"
                     id="create_customer_phonenumber"
                 />
-                <label htmlFor="create_customer_email">Customer Email: </label>
+                <label htmlFor="create_customer_email">Email: </label>
                 <input
                     type="text"
                     name="create_customer_email"
                     id="create_customer_email"
                 />
-                <input type="submit"/>
+                <input type="submit" />
             </form>
         </>
     );

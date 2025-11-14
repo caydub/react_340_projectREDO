@@ -6,9 +6,7 @@
 --- and thus are generally not included in INSERT statements. ArtistID and GenreID are exceptions
 --- as they are VARCHAR types and not auto-incrementing. Their IDs serve as primary keys 
 --- and are also meaningful descriptors/identifiers so no extra name attribute was needed.
---- Finally, we have written extra CRUD DML in case we want to implement them later.
 ---
-
 ---                             |
 --- DML for Albums entity       |
 ---                             |
@@ -44,8 +42,8 @@ VALUES (@artistID, @description);
 
 -- update an artist based on submission of the Update Artists form 
 UPDATE Artists
-SET artistID = @artistIDinput, description = @description
-WHERE artistID = @artistIDinput;
+SET artistID = @artistID, description = @description
+WHERE artistID = @artistID;
 
 -- delete an artist
 DELETE FROM Artists WHERE artistID = @artistID;
@@ -86,24 +84,29 @@ DELETE FROM Customers WHERE customerID = @customerID;
 ---                             |
 
 -- get all attributes for the List AlbumRatings page
-SELECT albumRatingID, albumRating, albumID, CONCAT(Customers.firstName,' ',Customers.lastName) AS customer
+SELECT albumRatingID, albumRating, Albums.albumName, CONCAT(Customers.firstName,' ',Customers.lastName) AS customer
 FROM AlbumRatings
 INNER JOIN Customers ON AlbumRatings.customerID = Customers.customerID
-ORDER BY customer;
-
--- get all attributes for the Update Album Ratings page
-SELECT albumRatingID, albumRating, albumID, Customers.firstName, Customers.lastName
-FROM AlbumRatings
-INNER JOIN Customers ON AlbumRatings.customerID = Customers.customerID
-WHERE albumRatingID = @albumRatingID;
+INNER JOIN Albums ON AlbumRatings.albumID = Albums.albumID;
 
 -- associate an album rating with a customer (M-to-M relationship addition)
-INSERT INTO AlbumRatings (albumRatingID, albumRating, albumID, customerID)
-VALUES (@albumRatingID, @albumRating, @albumID, @customerIDUsingFirstNameAndLastName);
+INSERT INTO AlbumRatings (albumID, customerID, albumRating)
+VALUES (
+    (SELECT albumID FROM Albums WHERE albumName = @albumName),
+    (SELECT customerID FROM Customers WHERE firstName = @firstName AND lastName = @lastName),
+    @albumRating
+);
 
 -- update an AlbumRating based on submission of the Update AlbumRating form 
 UPDATE AlbumRatings
-SET albumRating = @albumRating, albumID = @albumID, customerID = @customerIDUsingFirstNameAndLastName
+SET albumRating = @albumRating, 
+    albumID = (SELECT albumID FROM Albums WHERE albumName = @albumName),
+    customerID = (
+        SELECT customerID 
+        FROM Customers 
+        WHERE firstName = SUBSTRING_INDEX(@customerFullName, ' ', 1) 
+        AND lastName = SUBSTRING_INDEX(@customerFullName, ' ', -1)
+    )
 WHERE albumRatingID = @albumRatingID;
 
 -- delete an album rating
@@ -126,20 +129,36 @@ VALUES (
     @purchaseDate
 );
 
+-- lookup lineitems for a sale, to be implemented when pushing Line Items button
+SELECT lineItemID, salesID, albumID, albumPrice, quantity, quantity * albumPrice AS lineItemTotal
+FROM LineItems WHERE salesID = @salesID;
+
 ---                             |
 --- DML for LineItems entity    |
 ---                             |
 
 -- get all attributes for the List LineItems page
-SELECT lineItemID, salesID, albumID, albumPrice, quantity, quantity * albumPrice AS lineItemTotal FROM LineItems;
+SELECT lineItemID, salesID, Albums.albumName as albumName, LineItems.albumPrice as albumPrice, -- snapshot of price at time of sale
+quantity, quantity * LineItems.albumPrice AS lineItemTotal
+FROM LineItems
+INNER JOIN Albums ON LineItems.albumID = Albums.albumID;
 
 -- associate a sales line item with an album (M-to-M relationship addition)
-INSERT INTO LineItems (quantity, albumPrice, salesID, albumID) VALUES (@quantity, @albumPrice, @salesID, @albumID)
+INSERT INTO LineItems (salesID, albumID, albumPrice, quantity) 
+VALUES (
+    @salesID, 
+    (SELECT albumID FROM Albums WHERE albumName = @albumName),
+    @albumPrice,
+    @quantity
+);
 
 -- update a lineItem based on submission of the Update Line Items form 
 UPDATE LineItems
-SET lineItemID = @lineItemIDinput, quantity = @quantityinput, albumPrice = @albumPriceID, salesID = @salesIDinput, albumID = @albumIDinput
-WHERE lineItemID = @lineItemIDinput;
+SET 
+    salesID = @salesID, 
+    albumID = (SELECT albumID FROM Albums WHERE albumName = @albumName), 
+    albumPrice = @albumPrice, 
+WHERE lineItemID = @lineItemID;
 
 -- delete a line item
 DELETE FROM LineItems WHERE lineItemID = @lineItemID;

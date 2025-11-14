@@ -104,12 +104,10 @@ app.get('/Customers', async (req, res) => {
 
 app.get('/AlbumRatings', async (req, res) => {
     try {
-        const viewAlbumRatings = `
-        SELECT albumRatingID, albumRating, albumID, 
-        CONCAT(Customers.firstName, ' ', Customers.lastName) AS customer
-        FROM AlbumRatings
+        const viewAlbumRatings = `SELECT albumRatingID, albumRating, Albums.albumName,
+        CONCAT(Customers.firstName,' ',Customers.lastName) AS customer FROM AlbumRatings
         INNER JOIN Customers ON AlbumRatings.customerID = Customers.customerID
-        ORDER BY customer;`;
+        INNER JOIN Albums ON AlbumRatings.albumID = Albums.albumID;`;
 
         const [albumRatings] = await db.query(viewAlbumRatings);
         res.status(200).json({ albumRatings });
@@ -122,8 +120,9 @@ app.get('/AlbumRatings', async (req, res) => {
 
 app.get('/LineItems', async (req, res) => {
     try {
-        const viewLineItems = `SELECT lineItemID, salesID, albumID, albumPrice, \
-        quantity, quantity * albumPrice AS lineItemTotal FROM LineItems;`;
+        const viewLineItems = `SELECT lineItemID, salesID, Albums.albumName as albumName,
+        LineItems.albumPrice as albumPrice, quantity, quantity * LineItems.albumPrice AS lineItemTotal
+        FROM LineItems INNER JOIN Albums ON LineItems.albumID = Albums.albumID;`;
 
         const [lineItems] = await db.query(viewLineItems);
         res.status(200).json({ lineItems });
