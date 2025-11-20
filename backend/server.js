@@ -14,7 +14,7 @@ app.use(cors({ credentials: true, origin: "*" }));
 app.use(express.json()); // this is needed for post requests
 
 // Valid ports = 1024 < PORT < 65535
-const PORT = 59795;
+const PORT = 59695;
 
 // ########################################
 // ########## ROUTE HANDLERS
@@ -44,7 +44,7 @@ app.get('/Albums', async (req, res) => {
 app.post('/Albums/create', async (req, res) => {
     try {
         const data = req.body;
-        const query1 = 'CALL sp_CreateALbum(?, ?, ?, ?, ?);';
+        const query1 = 'CALL sp_CreateAlbum(?, ?, ?, ?, ?);';
         await db.query(query1, [
             data.albumName,
             data.albumPrice,
