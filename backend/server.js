@@ -133,6 +133,29 @@ app.get('/LineItems', async (req, res) => {
     }
 });
 
+// RESET DATABASE ROUTE
+app.post('/reset-database', async function (req, res) {
+    try {
+        // Execute the stored procedure to reset sample data
+        const query = `CALL sp_reset_sample_data();`;
+
+        await db.query(query);
+
+        console.log('Database reset successfully - sample data restored');
+
+        // Send success status to frontend
+        res.status(200).json({
+            message: 'Database reset successfully. Sample data has been restored.'
+        });
+    } catch (error) {
+        console.error('Error resetting database:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while resetting the database.'
+        );
+    }
+});
+
 // ########################################
 // ########## LISTENER
 
