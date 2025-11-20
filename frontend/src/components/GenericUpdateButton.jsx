@@ -27,7 +27,7 @@ const GenericUpdateButton = ({
     backendURL,
     refreshRows,
     updateRoute,
-    editableFields
+    editableFields = [] // empty default array
 }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState(
