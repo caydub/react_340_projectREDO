@@ -1,3 +1,5 @@
+import * as url from "node:url";
+
 const GenericDeleteButton = ({ rowObject, backendURL, refreshRows, deleteIdField, deleteRoute }) => {
 
     const handleSubmit = async (e) => {
@@ -8,6 +10,9 @@ const GenericDeleteButton = ({ rowObject, backendURL, refreshRows, deleteIdField
         };
 
         try {
+            console.log("URL: ", `${backendURL}${deleteRoute}`);
+            console.log("formData: ", formData);
+
             const response = await fetch(`${backendURL}${deleteRoute}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
