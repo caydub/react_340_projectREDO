@@ -1,3 +1,7 @@
+// WORK IN PROGRESS - No routing in place yet for this.
+// Following Module 8 REACT tutorial for AlbumUpdateButton.jsx
+// 11/20
+
 import React, { useState } from 'react';
 
 const CreateAlbumForm = ({ genres, backendURL, refreshAlbums }) => {

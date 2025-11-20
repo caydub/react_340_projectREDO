@@ -157,8 +157,9 @@ app.post('/reset', async function (req, res) {
 });
 
 // DELETE ROUTE for Albums
-// Add this to your server file (e.g., app.js or server.js)
-
+// Source: CS340 Week 8 Modules/Explorations (November 2025)
+// Purpose: REACT template code and video walkthrough for CUD (Create, Update, Delete) operations
+// Source URL: https://canvas.oregonstate.edu/courses/2017561/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25645149
 app.post('/Albums/delete', async function (req, res) {
     try {
         // Parse frontend form information
