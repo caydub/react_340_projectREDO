@@ -67,7 +67,7 @@ app.post('/Albums/update', async (req, res) => {
         const data = req.body;
         const query1 = 'CALL sp_UpdateAlbum(?, ?, ?, ?, ?, ?);';
         await db.query(query1, [
-            data.ablumID,
+            data.albumID,      // fix typo here
             data.albumName,
             data.albumPrice,
             data.amountInStock,
@@ -82,6 +82,7 @@ app.post('/Albums/update', async (req, res) => {
         res.status(500).send('An Error occurred while updating the album.');
     }
 });
+
 
 // DELETE Albums
 app.post('/Albums/delete', async (req, res) => {
