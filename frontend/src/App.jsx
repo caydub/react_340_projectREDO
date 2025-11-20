@@ -23,7 +23,7 @@ function App() {
         <>
             <Navigation />
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<Home backendURL={backendURL} />} />
                 <Route path="/albums" element={<Albums backendURL={backendURL} />} />
                 <Route path="/artists" element={<Artists backendURL={backendURL} />} />
                 <Route path="/genres" element={<Genres backendURL={backendURL} />} />

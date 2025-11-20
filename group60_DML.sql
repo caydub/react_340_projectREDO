@@ -157,7 +157,7 @@ UPDATE LineItems
 SET 
     salesID = @salesID, 
     albumID = (SELECT albumID FROM Albums WHERE albumName = @albumName), 
-    albumPrice = @albumPrice, 
+    albumPrice = @albumPrice 
 WHERE lineItemID = @lineItemID;
 
 -- delete a line item
