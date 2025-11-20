@@ -9,7 +9,7 @@ const ResetButton = ({ backendURL, onResetComplete }) => {
         }
 
         try {
-            const response = await fetch(backendURL + '/reset-database', {
+            const response = await fetch(backendURL + '/reset', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

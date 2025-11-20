@@ -14,7 +14,7 @@ app.use(cors({ credentials: true, origin: "*" }));
 app.use(express.json()); // this is needed for post requests
 
 // Valid ports = 1024 < PORT < 65535
-const PORT = 59895;
+const PORT = 59795;
 
 // ########################################
 // ########## ROUTE HANDLERS
@@ -155,7 +155,7 @@ app.get('/LineItems', async (req, res) => {
 });
 
 // RESET DATABASE ROUTE
-app.post('/reset-database', async function (req, res) {
+app.post('/reset', async function (req, res) {
     try {
         // Execute the stored procedure to reset sample data
         const query = `CALL sp_reset_sample_data();`;
