@@ -14,7 +14,7 @@ app.use(cors({ credentials: true, origin: "*" }));
 app.use(express.json()); // this is needed for post requests
 
 // Valid ports = 1024 < PORT < 65535
-const PORT = 59795;
+const PORT = 59695;
 
 // ########################################
 // ########## ROUTE HANDLERS
@@ -39,6 +39,50 @@ app.get('/Albums', async (req, res) => {
     }
 
 });
+
+// CREATE Albums
+app.post('/Albums/create', async (req, res) => {
+    try {
+        const data = req.body;
+        const query1 = 'CALL sp_CreateAlbum(?, ?, ?, ?, ?);';
+        await db.query(query1, [
+            data.albumName,
+            data.albumPrice,
+            data.amountInStock,
+            data.artistID,
+            data.genreID
+        ]);
+
+        console.log(`Created Album: ${data.albumName}`);
+        res.redirect('/Albums');
+    } catch(error) {
+        console.error('Error executing create albums queries:', error);
+        res.status(500).send('An error occurred while creating a new album.');
+    }
+});
+
+// UPDATE Albums
+app.post('/Albums/update', async (req, res) => {
+    try {
+        const data = req.body;
+        const query1 = 'CALL sp_UpdateAlbum(?, ?, ?, ?, ?, ?);';
+        await db.query(query1, [
+            data.albumID,      // fix typo here
+            data.albumName,
+            data.albumPrice,
+            data.amountInStock,
+            data.artistID,
+            data.genreID
+        ]);
+        console.log(`Updated Album.id: ${data.albumID}`);
+        res.redirect('/Albums');
+
+    } catch(error) {
+        console.error('Error executing queries', error);
+        res.status(500).send('An Error occurred while updating the album.');
+    }
+});
+
 
 // DELETE Albums
 app.post('/Albums/delete', async (req, res) => {

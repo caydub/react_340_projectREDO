@@ -20,45 +20,77 @@
 // 
 // AI Source URL: https://claude.ai/share/5669c902-16cc-44ae-9829-9b2f824b14c0
 
+import React, { useState } from 'react';
+
 const GenericUpdateButton = ({
     rowObject,
-    editedValues,
     backendURL,
     refreshRows,
-    isEditing,
-    setIsEditing,
-    setEditedValues
+    updateRoute,
+    editableFields = [] // empty default array
 }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [formData, setFormData] = useState(
+        editableFields.reduce((acc, field) => {
+            acc[field] = rowObject[field];
+            return acc;
+        }, {})
+    );
 
-    const handleUpdateClick = (e) => {
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSave = async (e) => {
         e.preventDefault();
-        if (isEditing) {
-            // When saving, you'll add your API call here later
-            console.log('Saving values:', editedValues);
-            // After successful save, exit edit mode
-            setIsEditing(false);
-        } else {
-            // Enter edit mode
-            setIsEditing(true);
+        try {
+            const response = await fetch(`${backendURL}${updateRoute}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ...formData, id: rowObject.id }),
+            });
+
+            if (response.ok) {
+                console.log('Row updated successfully.');
+                refreshRows();
+                setIsEditing(false);
+            } else {
+                console.error('Error updating row.');
+            }
+        } catch (err) {
+            console.error('Error during update:', err);
         }
     };
 
-    const handleCancelClick = (e) => {
+    const handleCancel = (e) => {
         e.preventDefault();
-        // Reset to original values and exit edit mode
-        setEditedValues(rowObject);
+        // Reset values
+        const resetData = editableFields.reduce((acc, field) => {
+            acc[field] = rowObject[field];
+            return acc;
+        }, {});
+        setFormData(resetData);
         setIsEditing(false);
     };
 
     return (
         <td>
-            <button type='button' onClick={handleUpdateClick}>
-                {isEditing ? 'Save' : 'Update'}
-            </button>
-            {isEditing && (
-                <button type='button' onClick={handleCancelClick} style={{ marginLeft: '5px' }}>
-                    Cancel
-                </button>
+            {isEditing ? (
+                <>
+                    {editableFields.map((field) => (
+                        <input
+                            key={field}
+                            name={field}
+                            value={formData[field]}
+                            onChange={handleChange}
+                        />
+                    ))}
+                    <button onClick={handleSave}>Save</button>
+                    <button onClick={handleCancel} style={{ marginLeft: '5px' }}>Cancel</button>
+                </>
+            ) : (
+                <button onClick={() => setIsEditing(true)}>Update</button>
             )}
         </td>
     );
