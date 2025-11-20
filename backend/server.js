@@ -40,6 +40,27 @@ app.get('/Albums', async (req, res) => {
 
 });
 
+// DELETE Albums
+app.post('/Albums/delete', async (req, res) => {
+    try {
+        // Parse frontend form info
+        const data = req.body;
+
+        // Create and execute our qeury
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query1 = 'CALL sp_DeleteAlbum(?);';
+        await db.query(query1, [data.delete_album_ID]);
+
+        console.log(`Deleted Album.id: ${data.delete_album_ID}`);
+
+        res.redirect('/Albums');
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send('An error occurred while executing the album database queries.');
+    }
+});
+
 app.get('/Artists', async (req, res) => {
     try {
         // Create and execute our queries
