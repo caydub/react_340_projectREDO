@@ -5,28 +5,50 @@
  \____|____/  |____/   |_|  \___/  |_|   |_|  \___// |\___|\___|\__|
                                                   |__/
 
+AI CITATIONS
 
-General Citations:
+Citation 1
+AI Model: Claude AI
+ Date: 11/13/2025
+ Purpose: Updated TableRow.jsx and GenericUpdateButton.jsx with in-place editing functionality
+ Prompts:
+Prompt 1: Implementing update button to make row values editable in place
+Prompt 2: Making first attribute/column non-editable
+ Source URL: https://claude.ai/share/5669c902-16cc-44ae-9829-9b2f824b14c0
 
-1.
-All code is based on the CS 340 starter code provided by Oregon State University and Professor Curry.
+Citation 2
+AI Tools: GitHub Copilot / ChatGPT
+ Date: 11/06/2025
+ Purpose: Debugging deprecated VITE version errors by analyzing console log errors. AI provided insight into pathing bug caused by old VITE version on engineering server, though solution required manual modification.
 
-Citations for use of AI Tools:
+Citation 3
+AI Model: ChatGPT
+ Date: 11/13/2025
+ Purpose: Generated 80s-themed template for index.css stylesheet, which was then modified
+ Prompt: "Please make a globally style sheet for REACT index.css sheet that is 80s themed."
+ Source URL: https://chatgpt.com
 
-1.
-The following prompts were utilized to update the components, TableRow.jsx and GenericUpdateButton.jsx, with functionality to edit row data in place when the Update button is clicked. 
+Citation 4
+AI Model: Claude 3.5 Sonnet
+ Date: 11/20/2024
+ Purpose: Created delete functionality connecting React frontend to Node.js backend. Generated AlbumDeleteButton.jsx component, AlbumTableRow.jsx component, /Albums/delete route in server.js, and sp_DeleteAlbum stored procedure. Fixed routing issues causing NULL values.
+ Source URL: https://claude.ai/
 
-Date: 11/13/2025
-Prompts used to generate JavaScript XML
+Citation 5
+AI Model: Claude 3.5 Sonnet
+ Date: 11/20/2024
+ Purpose: Created database reset functionality. Generated ResetButton.jsx component with fetch request to backend /reset-database route, confirmation dialog, error handling, and callback for post-reset actions.
+ Source URL: https://claude.ai/
 
-Prompt 1:
-Hey Claude, I am trying to implement a way to make the update button in the table row to allow the user to update the row values in place. The update values will be from server.js, but you do not need to worry about that for now. We do not need to implement any actual CRUD implementation at this time, just make the update button present the values already in place and make them editable.
+Citation 6
+AI Model: Claude 3.5 Sonnet
+ Date: 11/20/2024
+ Purpose: Integrated ResetButton component into Home page. Added import statement, backend URL configuration, callback handler, and positioned reset button at bottom of homepage.
+ Source URL: https://claude.ai/
 
-Prompt 2:
-Can you make it to where the first attribute/column is not editable?
- 
-AI Source URL: https://claude.ai/share/5669c902-16cc-44ae-9829-9b2f824b14c0
+NON-AI CITATIONS
 
-2.
-Date: 11/06/2025. We used AI tools like co-pilot or ChatGPT for debugging deprecated VITE version errors by copy/pasting error codes from console log to prompt window. The AI tool gave .jsx code suggestions to resolve a pathing bug caused by using an old version of VITE on the engineering server. It did not give a working solution but provided insight into the bug itself.
-
+Citation 7
+Source: CS340 Modules/Explorations (November 2025)
+ Purpose: Utilized REACT template code and video walkthroughs for several of the generic components/pages.
+ Source URL: https://canvas.oregonstate.edu/courses/2017561/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25645149

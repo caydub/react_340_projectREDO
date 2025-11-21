@@ -1,3 +1,5 @@
+// This module adapted from the starter code provided in CS340 Modules/Explorations
+
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 

@@ -54,8 +54,8 @@ CREATE OR REPLACE TABLE Customers (
     customerID int NOT NULL AUTO_INCREMENT UNIQUE,
     firstName varchar(45) NOT NULL,
     lastName varchar(45) NOT NULL,
-    phoneNumber varchar(15) DEFAULT 'Not provided',
-    email varchar(50) DEFAULT 'Not provided',
+    phoneNumber varchar(15) DEFAULT NULL,
+    email varchar(50) DEFAULT NULL,
     PRIMARY KEY (customerID)
 );
 
@@ -70,7 +70,7 @@ CREATE OR REPLACE TABLE AlbumRatings (
     customerID int,
     PRIMARY KEY (albumRatingID),
     FOREIGN KEY (albumID) REFERENCES Albums(albumID)
-    ON DELETE NO ACTION,
+    ON DELETE CASCADE,
     FOREIGN KEY (customerID) REFERENCES Customers(customerID)
     ON DELETE CASCADE
 );
@@ -102,7 +102,7 @@ CREATE OR REPLACE TABLE LineItems (
     albumID int,
     PRIMARY KEY (lineItemID),
     FOREIGN KEY (salesID) REFERENCES Sales(salesID)
-    ON DELETE NO ACTION,
+    ON DELETE CASCADE,
     FOREIGN KEY (albumID) REFERENCES Albums(albumID)
     ON DELETE NO ACTION
 );
@@ -164,7 +164,7 @@ VALUES
         'Steve', 'Vaughn', '901-801-7012', 's.vaughn@aol.com'
     ),
     (
-        'Alice', 'Johnson', NULL, 'Not Provided'
+        'Alice', 'Johnson', NULL, NULL
     ),
     (
         'Janice', 'Jackson', '555-666-7777', 'jj@hotmail.com'
@@ -189,7 +189,7 @@ VALUES
     (
         1.0,
         (SELECT albumID FROM Albums
-        WHERE albumName = 'Master of Puppets'),
+        WHERE albumName = 'Master Of Puppets'),
         (SELECT customerID FROM Customers
         WHERE firstName = 'Jimmy' AND lastName = 'Buffet')
     ),
@@ -270,7 +270,7 @@ VALUES
         AND Customers.lastName = 'Johnson'
         AND Sales.purchaseDate = '2025-10-11'),
         (SELECT albumID FROM Albums
-        WHERE albumName = 'Master of Puppets')
+        WHERE albumName = 'Master Of Puppets')
     );
 
 -- Untidying up the place
