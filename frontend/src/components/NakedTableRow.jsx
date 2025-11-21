@@ -1,3 +1,5 @@
+// This module adapted from the starter code provided in CS340 Modules/Explorations
+
 const TableRow = ({ rowObject, backendURL, refreshRows }) => {
     return (
         <tr>

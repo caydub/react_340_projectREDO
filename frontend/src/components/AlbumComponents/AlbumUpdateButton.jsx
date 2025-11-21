@@ -24,7 +24,7 @@ const AlbumTableRow = ({ album, backendURL, refreshRows }) => {
                         <input
                             type={
                                 key.toLowerCase().includes("price") ||
-                                key.toLowerCase().includes("amount")
+                                    key.toLowerCase().includes("amount")
                                     ? "number"
                                     : "text"
                             }

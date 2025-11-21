@@ -2,6 +2,9 @@
 // Following Module 8 REACT tutorial for AlbumUpdateButton.jsx
 // 11/20
 
+// This module adapted from the starter code provided in CS340 Modules/Explorations
+
+
 import React, { useState } from 'react';
 
 const CreateAlbumForm = ({ genres, backendURL, refreshAlbums }) => {
@@ -44,61 +47,61 @@ const CreateAlbumForm = ({ genres, backendURL, refreshAlbums }) => {
 
     return (
         <>
-        <h2>Create an Album</h2>
+            <h2>Create an Album</h2>
 
-        <form className='cuForm' onSubmit={handleSubmit}>
-            <label htmlFor="create_album_name">Album Name: </label>
-            <input
-                type="text"
-                name="create_album_name"
-                id="create_album_name"
-                value={formData.create_album_name}
-                onChange={handleChange}
-            />
+            <form className='cuForm' onSubmit={handleSubmit}>
+                <label htmlFor="create_album_name">Album Name: </label>
+                <input
+                    type="text"
+                    name="create_album_name"
+                    id="create_album_name"
+                    value={formData.create_album_name}
+                    onChange={handleChange}
+                />
 
-            <label htmlFor="create_album_price">Price: </label>
-            <input
-                type="number"
-                step="0.01"
-                name="create_album_price"
-                id="create_album_price"
-                value={formData.create_album_price}
-                onChange={handleChange}
-            />
+                <label htmlFor="create_album_price">Price: </label>
+                <input
+                    type="number"
+                    step="0.01"
+                    name="create_album_price"
+                    id="create_album_price"
+                    value={formData.create_album_price}
+                    onChange={handleChange}
+                />
 
-            <label htmlFor="create_album_amount_in_stock">Amount in Stock: </label>
-            <input
-                type="number"
-                name="create_album_amount_in_stock"
-                id="create_album_amount_in_stock"
-                value={formData.create_album_amount_in_stock}
-                onChange={handleChange}
-            />
+                <label htmlFor="create_album_amount_in_stock">Amount in Stock: </label>
+                <input
+                    type="number"
+                    name="create_album_amount_in_stock"
+                    id="create_album_amount_in_stock"
+                    value={formData.create_album_amount_in_stock}
+                    onChange={handleChange}
+                />
 
-            <label htmlFor="create_album_artist">Artist: </label>
-            <input
-                type="text"
-                name="create_album_artist"
-                id="create_album_artist"
-                value={formData.create_album_artist}
-                onChange={handleChange}
-            />
+                <label htmlFor="create_album_artist">Artist: </label>
+                <input
+                    type="text"
+                    name="create_album_artist"
+                    id="create_album_artist"
+                    value={formData.create_album_artist}
+                    onChange={handleChange}
+                />
 
-            <label htmlFor="create_album_genre">Genre: </label>
-            <select
-                name="create_album_genre"
-                id="create_album_genre"
-                value={formData.create_album_genre}
-                onChange={handleChange}
-            >
-                <option value="">Select a Genre</option>
-                {genres.map((genre, index) => (
-                    <option value={genre.genreID} key={index}>{genre.genreID}</option>
-                ))}
-            </select>
+                <label htmlFor="create_album_genre">Genre: </label>
+                <select
+                    name="create_album_genre"
+                    id="create_album_genre"
+                    value={formData.create_album_genre}
+                    onChange={handleChange}
+                >
+                    <option value="">Select a Genre</option>
+                    {genres.map((genre, index) => (
+                        <option value={genre.genreID} key={index}>{genre.genreID}</option>
+                    ))}
+                </select>
 
-            <input type="submit" />
-        </form>
+                <input type="submit" />
+            </form>
         </>
     );
 };

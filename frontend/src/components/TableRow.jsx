@@ -19,6 +19,8 @@
 // 
 // AI Source URL: https://claude.ai/share/5669c902-16cc-44ae-9829-9b2f824b14c0
 
+// This module adapted from the starter code provided in CS340 Modules/Explorations
+
 
 import { useState } from 'react';
 import GenericDeleteButton from './GenericDeleteButton';

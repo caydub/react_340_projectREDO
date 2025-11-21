@@ -1,3 +1,5 @@
+// This module adapted from the starter code provided in CS340 Modules/Explorations
+
 import * as url from "node:url";
 
 const GenericDeleteButton = ({ rowObject, backendURL, refreshRows, deleteIdField, deleteRoute }) => {
