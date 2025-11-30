@@ -1,65 +1,53 @@
 // WORK IN PROGRESS - No routing in place yet for this.
 // Following Module 8 REACT tutorial for AlbumUpdateButton.jsx
 // 11/20
-import { useState } from "react";
-import AlbumDeleteButton from "./AlbumDeleteButton";
-import GenericUpdateButton from "../GenericUpdateButton";
 
-const AlbumTableRow = ({ album, backendURL, refreshRows }) => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [editedValues, setEditedValues] = useState(album);
+const AlbumUpdateButton = ({ album, backendURL, refreshRows, editedValues, setEditedValues, isEditing, setIsEditing, genres }) => {
+    const handleSave = async () => {
+        try {
+            const response = await fetch(`${backendURL}/Albums/update`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    albumID: editedValues.albumID,
+                    albumName: editedValues.albumName,
+                    albumPrice: parseFloat(editedValues.albumPrice),
+                    amountInStock: parseInt(editedValues.amountInStock),
+                    artistID: editedValues.artistID,
+                    genreID: editedValues.genreID
+                }),
+            });
 
-    const handleInputChange = (key, value) => {
-        setEditedValues(prev => ({
-            ...prev,
-            [key]: value
-        }));
+            if (response.ok) {
+                console.log(`Album updated successfully.`);
+                refreshRows();
+                setIsEditing(false);
+            } else {
+                alert(`Error updating album`);
+            }
+        } catch (error) {
+            console.error("Error updating album:", error);
+            alert("An error occurred while updating the album.");
+        }
+    };
+
+    const handleCancel = () => {
+        setEditedValues(album); // reset edits
+        setIsEditing(false);
     };
 
     return (
-        <tr>
-            {Object.entries(album).map(([key, value]) => (
-                <td key={key}>
-                    {isEditing && key !== "albumID" ? (
-                        <input
-                            type={
-                                key.toLowerCase().includes("price") ||
-                                    key.toLowerCase().includes("amount")
-                                    ? "number"
-                                    : "text"
-                            }
-                            name={key}
-                            value={editedValues[key]}
-                            onChange={(e) => handleInputChange(key, e.target.value)}
-                            style={{ width: "100%" }}
-                        />
-                    ) : (
-                        value
-                    )}
-                </td>
-            ))}
-
-            {/* Delete button */}
-            <AlbumDeleteButton
-                albumID={album.albumID}
-                backendURL={backendURL}
-                refreshRows={refreshRows}
-            />
-
-            {/* Update button */}
-            <GenericUpdateButton
-                rowObject={album}
-                editedValues={editedValues}
-                setEditedValues={setEditedValues}
-                isEditing={isEditing}
-                setIsEditing={setIsEditing}
-                backendURL={backendURL}
-                updateRoute="/Albums/update"
-                editableFields={Object.keys(album).filter(k => k !== "albumID")}
-                refreshRows={refreshRows}
-            />
-        </tr>
+        <td>
+            {isEditing ? (
+                <>
+                    <button onClick={handleSave}>Save</button>
+                    <button onClick={handleCancel} style={{ marginLeft: "5px" }}>Cancel</button>
+                </>
+            ) : (
+                <button onClick={() => setIsEditing(true)}>Update</button>
+            )}
+        </td>
     );
 };
 
-export default AlbumTableRow;
+export default AlbumUpdateButton;

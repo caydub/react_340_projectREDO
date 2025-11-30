@@ -201,6 +201,103 @@ app.post('/Albums/delete', async function (req, res) {
     }
 });
 
+// UPDATE ROUTE for Albums
+// Source: CS340 Week 8 Modules/Explorations (November 2025)
+// Purpose: REACT template code and video walkthrough for CUD (Create, Update, Delete) operations
+// Source URL: https://canvas.oregonstate.edu/courses/2017561/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25645149
+app.post('/Albums/update', async function (req, res) {
+    try {
+        // Parse frontend form information
+        let data = req.body;
+
+        // Create and execute our query
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query1 = `CALL sp_UpdateAlbum(?, ?, ?, ?, ?, ?);`;
+        await db.query(query1, [data.albumID, data.albumName, data.albumPrice, data.amountInStock, data.artistID, data.genreID]);
+
+        console.log(`UPDATE Album. ID: ${data.albumID} ` +
+            ` Name: ${data.albumName || 'N/A'}` +
+            ` Price: ${data.albumPrice || 'N/A'}` +
+            ` AmountInStock: ${data.amountInStock || 'N/A'}` +
+            ` ArtistID: ${data.artistID || 'N/A'}` +
+            ` GenreID: ${data.genreID || 'N/A'}`
+        );
+
+        // Send success response back to frontend
+        res.status(200).json({
+            success: true,
+            message: 'Album updated successfully'
+        });
+
+    } catch (error) {
+        console.error('Error updating album:', error);
+
+        // Check if error is due to foreign key constraint
+        if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+            res.status(400).json({
+                success: false,
+                message: 'Cannot update album. It has associated ratings or sales.'
+            });
+        } else {
+            // Send a generic error message
+            res.status(500).json({
+                success: false,
+                message: 'An error occurred while updating the album.'
+            });
+        }
+    }
+});
+
+// CREATE ROUTE for Albums
+// Source: CS340 Week 8 Modules/Explorations (November 2025)
+// Purpose: REACT template code and video walkthrough for CUD (Create, Update, Delete) operations
+// Source URL: https://canvas.oregonstate.edu/courses/2017561/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25645149
+app.post('/Albums/create', async function (req, res) {
+    try {
+        // Parse frontend form information
+        let data = req.body;
+
+        // Create and execute our query
+        // Using parameterized queries (Prevents SQL injection attacks)
+        const query1 = `CALL sp_CreateAlbum(?, ?, ?, ?, ?, @newID);`;
+        const [rows] = await db.query(query1, [data.albumName, data.albumPrice, data.amountInStock, data.artistID, data.genreID, null]);
+        // Extract newID from SELECT LAST_INSERT_ID() AS 'new_albumID';
+        const newID = rows[0][0].new_albumID;
+
+        console.log(`CREATE Album. ID: ${newID} ` +
+            ` Name: ${data.albumName || 'N/A'}` +
+            ` Price: ${data.albumPrice || 'N/A'}` +
+            ` AmountInStock: ${data.amountInStock || 'N/A'}` +
+            ` ArtistID: ${data.artistID || 'N/A'}` +
+            ` GenreID: ${data.genreID || 'N/A'}`
+        );
+
+        // Send success response back to frontend
+        res.status(200).json({
+            success: true,
+            message: 'Album created successfully',
+            new_albumID: newID
+        });
+
+    } catch (error) {
+        console.error('Error creating album:', error);
+
+        // Check if error is due to foreign key constraint
+        if (error.code === 'ER_ROW_IS_REFERENCED_2' || error.code === 'ER_NO_REFERENCED_ROW_2') {
+            res.status(400).json({
+                success: false,
+                message: 'Cannot create album. Invalid artist name.'
+            });
+        } else {
+            // Send a generic error message
+            res.status(500).json({
+                success: false,
+                message: 'An error occurred while creating the album.'
+            });
+        }
+    }
+});
+
 // ########################################
 // ########## LISTENER
 

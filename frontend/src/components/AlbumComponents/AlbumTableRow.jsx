@@ -23,13 +23,13 @@
 
 
 
-import { useState } from 'react';
-import AlbumDeleteButton from './AlbumDeleteButton';
-import GenericUpdateButton from '../GenericUpdateButton';
+import { useState } from "react";
+import AlbumDeleteButton from "./AlbumDeleteButton";
+import AlbumUpdateButton from "./AlbumUpdateButton";
 
-const TableRow = ({ rowObject, backendURL, refreshRows }) => {
+const AlbumTableRow = ({ album, backendURL, refreshRows, genres }) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [editedValues, setEditedValues] = useState(rowObject);
+    const [editedValues, setEditedValues] = useState(album);
 
     const handleInputChange = (key, value) => {
         setEditedValues(prev => ({
@@ -40,37 +40,61 @@ const TableRow = ({ rowObject, backendURL, refreshRows }) => {
 
     return (
         <tr>
-            {Object.entries(rowObject).map(([key, value], index) => (
-                <td key={index}>
-                    {isEditing && index !== 0 ? (
-                        <input
-                            type="text"
-                            value={editedValues[key] || ''}
-                            onChange={(e) => handleInputChange(key, e.target.value)}
-                            style={{ width: '100%' }}
-                        />
+            {Object.entries(album).map(([key, value]) => (
+                <td key={key}>
+                    {isEditing && key !== "albumID" ? (
+                        key === "genreID" ? (
+                            <select
+                                value={editedValues.genreID}
+                                onChange={(e) => handleInputChange("genreID", e.target.value)}
+                                style={{ width: "100%" }}
+                            >
+                                <option value="">Select a Genre</option>
+                                {genres.map((genre) => (
+                                    <option value={genre.genreID} key={genre.genreID}>
+                                        {genre.genreName}
+                                    </option>
+                                ))}
+                            </select>
+                        ) : (
+                            <input
+                                type={
+                                    key.toLowerCase().includes("price") || key.toLowerCase().includes("amount")
+                                        ? "number"
+                                        : "text"
+                                }
+                                name={key}
+                                value={editedValues[key]}
+                                onChange={(e) => handleInputChange(key, e.target.value)}
+                                style={{ width: "100%" }}
+                            />
+                        )
                     ) : (
                         value
                     )}
                 </td>
             ))}
 
+            {/* Delete button */}
             <AlbumDeleteButton
-                rowObject={rowObject}
+                rowObject={album}
                 backendURL={backendURL}
                 refreshRows={refreshRows}
             />
-            <GenericUpdateButton
-                rowObject={rowObject}
-                editedValues={editedValues}
+
+            {/* Update button */}
+            <AlbumUpdateButton
+                album={album}
                 backendURL={backendURL}
                 refreshRows={refreshRows}
+                editedValues={editedValues}
+                setEditedValues={setEditedValues}
                 isEditing={isEditing}
                 setIsEditing={setIsEditing}
-                setEditedValues={setEditedValues}
+                genres={genres}
             />
         </tr>
     );
 };
 
-export default TableRow;
+export default AlbumTableRow;
