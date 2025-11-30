@@ -45,6 +45,7 @@ const AlbumTableRow = ({ album, backendURL, refreshRows, genres }) => {
                     {isEditing && key !== "albumID" ? (
                         key === "genreID" ? (
                             <select
+                                name = "genreID"
                                 value={editedValues.genreID}
                                 onChange={(e) => handleInputChange("genreID", e.target.value)}
                                 style={{ width: "100%" }}
@@ -52,7 +53,7 @@ const AlbumTableRow = ({ album, backendURL, refreshRows, genres }) => {
                                 <option value="">Select a Genre</option>
                                 {genres.map((genre) => (
                                     <option value={genre.genreID} key={genre.genreID}>
-                                        {genre.genreName}
+                                        {genre.genreID}
                                     </option>
                                 ))}
                             </select>

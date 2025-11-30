@@ -4,9 +4,9 @@
 // This module adapted from the starter code provided in CS340 Modules/Explorations
 
 
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
-const CreateAlbumForm = ({ genres, backendURL, refreshAlbums }) => {
+const CreateAlbumForm = ({ backendURL, refreshAlbums }) => {
     const [formData, setFormData] = useState({
         albumName: '',
         albumPrice: '',
@@ -14,6 +14,21 @@ const CreateAlbumForm = ({ genres, backendURL, refreshAlbums }) => {
         artistID: '',
         genreID: ''
     });
+
+    const [genres, setGenres] = useState([]);
+
+    useEffect(() => {
+        async function fetchGenres() {
+            try {
+                const response = await fetch(`${backendURL}/Genres`);
+                const data = await response.json();
+                setGenres(data.genres || []);
+            } catch (error) {
+                console.error("Failed to fetch Genres", error);
+            }
+        }
+        fetchGenres();
+    }, [backendURL]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -115,7 +130,7 @@ const CreateAlbumForm = ({ genres, backendURL, refreshAlbums }) => {
                     <option value="">Select a Genre</option>
                     {genres.map((genre) => (
                         <option value={genre.genreID} key={genre.genreID}>
-                            {genre.genreName}
+                            {genre.genreID}
                         </option>
                     ))}
                 </select>
