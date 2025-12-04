@@ -16,7 +16,8 @@ app.use(cors({ credentials: true, origin: "*" }));
 app.use(express.json()); // this is needed for post requests
 
 // Valid ports = 1024 < PORT < 65535
-const PORT = 59695;
+// const PORT = 59695;
+const PORT = 95695; // testing backend port
 
 // ########################################
 // ########## ROUTE HANDLERS
@@ -88,6 +89,26 @@ app.get('/Sales', async (req, res) => {
         res.status(500).send("An error occurred while executing the database queries.");
     }
 
+});
+
+app.get('/Sales/:salesID/lineitems', async (req, res) => {
+    try {
+        const salesID = req.params.salesID;
+
+        const query = `SELECT lineItemID, salesID, Albums.albumName as albumName,
+            LineItems.albumPrice as albumPrice, quantity, quantity * LineItems.albumPrice AS lineItemTotal
+            FROM LineItems 
+            INNER JOIN Albums ON LineItems.albumID = Albums.albumID
+            WHERE LineItems.salesID = ?;`;
+
+        const [lineItems] = await db.query(query, [salesID]);
+
+        res.status(200).json({ lineItems });
+
+    } catch (error) {
+        console.error("Error executing line items query:", error);
+        res.status(500).send("An error occurred while retrieving line items.");
+    }
 });
 
 app.get('/Customers', async (req, res) => {
