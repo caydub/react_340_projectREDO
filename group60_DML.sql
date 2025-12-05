@@ -101,11 +101,9 @@ SELECT genreID, description FROM Genres;
 ---                             |
 
 -- get all attributes for the List Customers page
--- this query also provides data for customer dropdowns in forms (firstName, lastName, customer)
+-- displays concatenated customer name instead of separate firstName/lastName
 SELECT
     customerID,
-    firstName,
-    lastName,
     CONCAT(firstName, ' ', lastName) AS customer,
     phoneNumber,
     email
@@ -128,7 +126,8 @@ VALUES (
     );
 
 -- update a customer based on submission of the Update Customers form
--- Note: actual implementation uses sp_UpdateCustomer stored procedure
+-- Note: Frontend parses full name (e.g., "John Smith") into firstName/lastName in JavaScript
+-- Note: Actual implementation uses sp_UpdateCustomer stored procedure
 UPDATE Customers
 SET
     firstName = @firstName,

@@ -141,8 +141,9 @@ app.get('/Sales/:salesID/lineitems', async (req, res) => {
 
 app.get('/Customers', async (req, res) => {
     try {
-        const viewCustomers = `SELECT customerID, firstName, lastName,
-        CONCAT(firstName, ' ', lastName) AS customer, phoneNumber, email
+        const viewCustomers = `SELECT customerID, 
+        CONCAT(firstName, ' ', lastName) AS customer, 
+        phoneNumber, email
         FROM Customers;`;
         const [customers] = await db.query(viewCustomers);
         res.status(200).json({ customers });

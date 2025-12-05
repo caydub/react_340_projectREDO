@@ -8,49 +8,32 @@
    
    AI Model: Claude 3.5 Sonnet
    Date: 12/04/2025
-   Purpose: Created AlbumRatingTableRow with inline editing and dropdowns for M:N relationship
-   Summary: Implemented custom table row with inline editing that includes dropdowns for Albums and Customers,
-            and rating selector for the M:N AlbumRatings entity.
+   Purpose: Created AlbumRatingTableRow with inline editing and customer name parsing
+   Summary: Single text input for customer name that parses into firstName/lastName on save.
+            Inline editing for albumName, customer, and albumRating.
    AI Source URL: https://claude.ai/
 */
 
 import { useState, useEffect } from "react";
-import AlbumRatingDeleteButton from "./AlbumRatingDeleteButton";
-import AlbumRatingUpdateButton from "./AlbumRatingUpdateButton";
 
 const AlbumRatingTableRow = ({ rating, backendURL, refreshAlbumRatings }) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [editedValues, setEditedValues] = useState(rating);
-    const [albums, setAlbums] = useState([]);
-    const [customers, setCustomers] = useState([]);
+    const [editedValues, setEditedValues] = useState({
+        albumRatingID: rating.albumRatingID,
+        albumName: rating.albumName,
+        customer: rating.customer,
+        albumRating: rating.albumRating
+    });
 
-    // Fetch albums for dropdown
+    // Sync with rating prop when it changes
     useEffect(() => {
-        async function fetchAlbums() {
-            try {
-                const response = await fetch(`${backendURL}/Albums`);
-                const data = await response.json();
-                setAlbums(data.albums || []);
-            } catch (error) {
-                console.error("Failed to fetch Albums", error);
-            }
-        }
-        fetchAlbums();
-    }, [backendURL]);
-
-    // Fetch customers for dropdown
-    useEffect(() => {
-        async function fetchCustomers() {
-            try {
-                const response = await fetch(`${backendURL}/Customers`);
-                const data = await response.json();
-                setCustomers(data.customers || []);
-            } catch (error) {
-                console.error("Failed to fetch Customers", error);
-            }
-        }
-        fetchCustomers();
-    }, [backendURL]);
+        setEditedValues({
+            albumRatingID: rating.albumRatingID,
+            albumName: rating.albumName,
+            customer: rating.customer,
+            albumRating: rating.albumRating
+        });
+    }, [rating]);
 
     const handleInputChange = (key, value) => {
         setEditedValues(prev => ({
@@ -59,20 +42,94 @@ const AlbumRatingTableRow = ({ rating, backendURL, refreshAlbumRatings }) => {
         }));
     };
 
+    const handleUpdate = async () => {
+        // Validate required fields
+        if (!editedValues.albumName || !editedValues.customer || !editedValues.albumRating) {
+            alert("All fields are required");
+            return;
+        }
+
+        // Parse customer name into firstName and lastName
+        const nameParts = editedValues.customer.trim().split(' ');
+        const firstName = nameParts[0];
+        const lastName = nameParts.slice(1).join(' ') || nameParts[0];
+
+        try {
+            const response = await fetch(`${backendURL}/AlbumRatings/update`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    albumRatingID: editedValues.albumRatingID,
+                    albumName: editedValues.albumName,
+                    firstName: firstName,
+                    lastName: lastName,
+                    albumRating: parseFloat(editedValues.albumRating)
+                }),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                alert('Album rating updated successfully!');
+                setIsEditing(false);
+                refreshAlbumRatings();
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            console.error("Error updating album rating:", error);
+            alert("An error occurred while updating the album rating.");
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!window.confirm(`Are you sure you want to delete this rating?`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${backendURL}/AlbumRatings/delete`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    albumRatingID: rating.albumRatingID
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                alert('Album rating deleted successfully!');
+                refreshAlbumRatings();
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            console.error('Error deleting album rating:', error);
+            alert('An error occurred while deleting the album rating.');
+        }
+    };
+
+    const handleCancel = () => {
+        setEditedValues(rating); // reset to original
+        setIsEditing(false);
+    };
+
     return (
         <tr>
             {/* albumRatingID - not editable */}
             <td>{rating.albumRatingID}</td>
 
-            {/* albumRating - rating dropdown 0.0-5.0 */}
+            {/* albumRating - editable */}
             <td>
                 {isEditing ? (
                     <select
-                        name="albumRating"
                         value={editedValues.albumRating}
                         onChange={(e) => handleInputChange("albumRating", e.target.value)}
+                        style={{ width: '100%' }}
                     >
-                        <option value="0.0">0.0</option>
+                        <option value="">Select a Rating</option>
+                        <option value="0">0</option>
                         <option value="0.5">0.5</option>
                         <option value="1.0">1.0</option>
                         <option value="1.5">1.5</option>
@@ -89,61 +146,52 @@ const AlbumRatingTableRow = ({ rating, backendURL, refreshAlbumRatings }) => {
                 )}
             </td>
 
-            {/* albumName - dropdown when editing */}
+            {/* albumName - editable */}
             <td>
                 {isEditing ? (
-                    <select
-                        name="albumName"
+                    <input
+                        type="text"
                         value={editedValues.albumName}
                         onChange={(e) => handleInputChange("albumName", e.target.value)}
-                    >
-                        <option value="">Select Album</option>
-                        {albums.map((album) => (
-                            <option key={album.albumID} value={album.albumName}>
-                                {album.albumName}
-                            </option>
-                        ))}
-                    </select>
+                        placeholder="Album name"
+                        style={{ width: '100%' }}
+                    />
                 ) : (
                     rating.albumName
                 )}
             </td>
 
-            {/* customer - dropdown when editing */}
+            {/* customer - editable, parses on save */}
             <td>
                 {isEditing ? (
-                    <select
-                        name="customer"
+                    <input
+                        type="text"
                         value={editedValues.customer}
                         onChange={(e) => handleInputChange("customer", e.target.value)}
-                    >
-                        <option value="">Select Customer</option>
-                        {customers.map((cust) => (
-                            <option key={cust.customerID} value={cust.customer}>
-                                {cust.customer}
-                            </option>
-                        ))}
-                    </select>
+                        placeholder="First Last"
+                        style={{ width: '100%' }}
+                    />
                 ) : (
                     rating.customer
                 )}
             </td>
 
-            <AlbumRatingDeleteButton
-                albumRatingID={rating.albumRatingID}
-                backendURL={backendURL}
-                refreshAlbumRatings={refreshAlbumRatings}
-            />
-            <AlbumRatingUpdateButton
-                albumRatingID={rating.albumRatingID}
-                editedValues={editedValues}
-                backendURL={backendURL}
-                refreshAlbumRatings={refreshAlbumRatings}
-                isEditing={isEditing}
-                setIsEditing={setIsEditing}
-                setEditedValues={setEditedValues}
-                originalRating={rating}
-            />
+            {/* Delete button */}
+            <td>
+                <button onClick={handleDelete}>Delete</button>
+            </td>
+
+            {/* Update button */}
+            <td>
+                {isEditing ? (
+                    <>
+                        <button onClick={handleUpdate}>Save</button>
+                        <button onClick={handleCancel} style={{ marginLeft: "5px" }}>Cancel</button>
+                    </>
+                ) : (
+                    <button onClick={() => setIsEditing(true)}>Update</button>
+                )}
+            </td>
         </tr>
     );
 };

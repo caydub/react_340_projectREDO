@@ -10,7 +10,7 @@
    Date: 12/04/2025
    Purpose: Created update button for Customers entity with inline editing
    Summary: Implemented update functionality with save/cancel buttons, backend API call to /Customers/update,
-            and error handling. Updates firstName, lastName, phoneNumber, and email.
+            and error handling. Parses customer full name into firstName/lastName before sending to backend.
    AI Source URL: https://claude.ai/
 */
 
@@ -25,11 +25,16 @@ const CustomerUpdateButton = ({
     originalCustomer
 }) => {
     const handleSave = async () => {
-        // Validate required fields
-        if (!editedValues.firstName || !editedValues.lastName) {
-            alert("First name and last name are required");
+        // Validate customer name exists
+        if (!editedValues.customer || !editedValues.customer.trim()) {
+            alert("Customer name is required");
             return;
         }
+
+        // Parse customer name into firstName and lastName
+        const nameParts = editedValues.customer.trim().split(' ');
+        const firstName = nameParts[0];
+        const lastName = nameParts.slice(1).join(' ') || nameParts[0]; // If no last name, use first name
 
         try {
             const response = await fetch(`${backendURL}/Customers/update`, {
@@ -37,8 +42,8 @@ const CustomerUpdateButton = ({
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     customerID: customerID,
-                    firstName: editedValues.firstName,
-                    lastName: editedValues.lastName,
+                    firstName: firstName,
+                    lastName: lastName,
                     phoneNumber: editedValues.phoneNumber || null,
                     email: editedValues.email || null
                 }),
@@ -48,8 +53,8 @@ const CustomerUpdateButton = ({
 
             if (result.success) {
                 alert('Customer updated successfully!');
-                refreshCustomers();
                 setIsEditing(false);
+                refreshCustomers();
             } else {
                 alert(`Error: ${result.message}`);
             }

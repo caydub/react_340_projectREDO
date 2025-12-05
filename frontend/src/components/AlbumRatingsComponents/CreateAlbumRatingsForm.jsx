@@ -2,59 +2,28 @@
    
    Source: CS340 Modules/Explorations
    Date: November 2025
-   Purpose: Form structure and state management patterns
+   Purpose: Form structure and patterns
    Summary: Base form structure adapted from CS340 starter code.
-   Source URL: https://canvas.oregonstate.edu/courses/2017561/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25645149
+   Source URL: https://canvas.oregonstate.edu/courses/2017561
    
    AI Model: Claude 3.5 Sonnet
    Date: 12/04/2025
-   Purpose: Created functional AlbumRatings form with dropdowns for M:N relationship
-   Summary: Implemented create form with Albums dropdown, Customers dropdown, and rating selection.
-            Handles fetching data for dropdowns and submitting to backend.
+   Purpose: Updated CreateAlbumRatingsForm to use customer name parsing
+   Summary: Changed from dropdown to single text input for customer name. 
+            Parses full name into firstName/lastName before sending to backend.
    AI Source URL: https://claude.ai/
 */
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const CreateAlbumRatingsForm = ({ backendURL, refreshAlbumRatings }) => {
-    const [albums, setAlbums] = useState([]);
-    const [customers, setCustomers] = useState([]);
     const [formData, setFormData] = useState({
         albumName: '',
-        firstName: '',
-        lastName: '',
+        customerName: '',
         albumRating: ''
     });
 
-    // Fetch albums for dropdown
-    useEffect(() => {
-        async function fetchAlbums() {
-            try {
-                const response = await fetch(`${backendURL}/Albums`);
-                const data = await response.json();
-                setAlbums(data.albums || []);
-            } catch (error) {
-                console.error("Failed to fetch Albums", error);
-            }
-        }
-        fetchAlbums();
-    }, [backendURL]);
-
-    // Fetch customers for dropdown
-    useEffect(() => {
-        async function fetchCustomers() {
-            try {
-                const response = await fetch(`${backendURL}/Customers`);
-                const data = await response.json();
-                setCustomers(data.customers || []);
-            } catch (error) {
-                console.error("Failed to fetch Customers", error);
-            }
-        }
-        fetchCustomers();
-    }, [backendURL]);
-
-    const handleInputChange = (e) => {
+    const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
@@ -62,66 +31,49 @@ const CreateAlbumRatingsForm = ({ backendURL, refreshAlbumRatings }) => {
         }));
     };
 
-    const handleCustomerChange = (e) => {
-        const selectedCustomer = e.target.value;
-        if (selectedCustomer) {
-            const [firstName, lastName] = selectedCustomer.split('|');
-            setFormData(prev => ({
-                ...prev,
-                firstName: firstName,
-                lastName: lastName
-            }));
-        } else {
-            setFormData(prev => ({
-                ...prev,
-                firstName: '',
-                lastName: ''
-            }));
-        }
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         // Validate required fields
-        if (!formData.albumName || !formData.firstName || !formData.lastName || !formData.albumRating) {
-            alert("Please fill in all fields");
+        if (!formData.albumName || !formData.customerName || !formData.albumRating) {
+            alert("All fields are required");
             return;
         }
 
+        // Parse customer name into firstName and lastName
+        const nameParts = formData.customerName.trim().split(' ');
+        const firstName = nameParts[0];
+        const lastName = nameParts.slice(1).join(' ') || nameParts[0]; // Use first name if no last name
+
         try {
             const response = await fetch(`${backendURL}/AlbumRatings/create`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     albumName: formData.albumName,
-                    firstName: formData.firstName,
-                    lastName: formData.lastName,
+                    firstName: firstName,
+                    lastName: lastName,
                     albumRating: parseFloat(formData.albumRating)
-                })
+                }),
             });
 
             const result = await response.json();
 
             if (result.success) {
-                alert(`Album rating created successfully! ID: ${result.new_albumRatingID}`);
-                refreshAlbumRatings(); // Refresh the table
+                alert('Album rating created successfully!');
+                refreshAlbumRatings();
                 // Reset form
                 setFormData({
                     albumName: '',
-                    firstName: '',
-                    lastName: '',
+                    customerName: '',
                     albumRating: ''
                 });
             } else {
                 alert(`Error: ${result.message}`);
             }
-
         } catch (error) {
-            console.error("Error creating album rating:", error);
-            alert("An error occurred while creating the album rating");
+            console.error('Error creating album rating:', error);
+            alert('An error occurred while creating the album rating.');
         }
     };
 
@@ -130,51 +82,38 @@ const CreateAlbumRatingsForm = ({ backendURL, refreshAlbumRatings }) => {
             <h2>Create an Album Rating</h2>
 
             <form className='cuForm' onSubmit={handleSubmit}>
-                <label htmlFor="albumName">Album: </label>
-                <select
+                <label htmlFor="albumName">Album Name: </label>
+                <input
+                    type="text"
                     name="albumName"
                     id="albumName"
                     value={formData.albumName}
-                    onChange={handleInputChange}
+                    onChange={handleChange}
+                    placeholder="Enter album name"
                     required
-                >
-                    <option value="">Select an Album</option>
-                    {albums.map((album) => (
-                        <option key={album.albumID} value={album.albumName}>
-                            {album.albumName}
-                        </option>
-                    ))}
-                </select>
+                />
 
-                <label htmlFor="customer">Customer: </label>
-                <select
-                    name="customer"
-                    id="customer"
-                    value={formData.firstName && formData.lastName ? `${formData.firstName}|${formData.lastName}` : ''}
-                    onChange={handleCustomerChange}
+                <label htmlFor="customerName">Customer Name: </label>
+                <input
+                    type="text"
+                    name="customerName"
+                    id="customerName"
+                    value={formData.customerName}
+                    onChange={handleChange}
+                    placeholder="First Last"
                     required
-                >
-                    <option value="">Select a Customer</option>
-                    {customers.map((customer) => (
-                        <option
-                            key={customer.customerID}
-                            value={`${customer.firstName}|${customer.lastName}`}
-                        >
-                            {customer.customer}
-                        </option>
-                    ))}
-                </select>
+                />
 
                 <label htmlFor="albumRating">Rating: </label>
                 <select
                     name="albumRating"
                     id="albumRating"
                     value={formData.albumRating}
-                    onChange={handleInputChange}
+                    onChange={handleChange}
                     required
                 >
                     <option value="">Select a Rating</option>
-                    <option value="0.0">0.0</option>
+                    <option value="0">0</option>
                     <option value="0.5">0.5</option>
                     <option value="1.0">1.0</option>
                     <option value="1.5">1.5</option>
@@ -187,7 +126,7 @@ const CreateAlbumRatingsForm = ({ backendURL, refreshAlbumRatings }) => {
                     <option value="5.0">5.0</option>
                 </select>
 
-                <input type="submit" value="Create Album Rating" />
+                <input type="submit" value="Create Rating" />
             </form>
         </>
     );
