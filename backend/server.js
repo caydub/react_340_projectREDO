@@ -403,6 +403,12 @@ app.post('/Albums/create', async function (req, res) {
         // Parse frontend form information
         let data = req.body;
 
+        // Check if artist exists
+        const [artistRows] = await db.query('SELECT artistID FROM Artists WHERE artistID = ?', [data.artistID]);
+        if(artistRows.length === 0){
+            await db.query('CALL sp_CreateArtist(?, ?)', [data.artistID, 'Description pending...']);
+            console.log(`Created new artist: ${data.artistID}`);
+        }
         // Create and execute our query
         // Using parameterized queries (Prevents SQL injection attacks)
         const query1 = `CALL sp_CreateAlbum(?, ?, ?, ?, ?, @newID);`;
