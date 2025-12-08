@@ -33,8 +33,8 @@ app.use(cors({ credentials: true, origin: "*" }));
 app.use(express.json()); // this is needed for post requests
 
 // Valid ports = 1024 < PORT < 65535
-// const PORT = 59695;
-const PORT = 55695; // testing port
+const PORT = 59695;
+// const PORT = 55695; // testing port
 
 // ########################################
 // ########## ROUTE HANDLERS
@@ -341,7 +341,7 @@ app.post('/Albums/delete', async function (req, res) {
         if (error.code === 'ER_ROW_IS_REFERENCED_2') {
             res.status(400).json({
                 success: false,
-                message: 'Cannot delete album. It has associated ratings or sales.'
+                message: 'Cannot delete album. It has associated sales.'
             });
         } else {
             // Send a generic error message
@@ -403,12 +403,6 @@ app.post('/Albums/create', async function (req, res) {
         // Parse frontend form information
         let data = req.body;
 
-        // Check if artist exists
-        const [artistRows] = await db.query('SELECT artistID FROM Artists WHERE artistID = ?', [data.artistID]);
-        if(artistRows.length === 0){
-            await db.query('CALL sp_CreateArtist(?, ?)', [data.artistID, 'Description pending...']);
-            console.log(`Created new artist: ${data.artistID}`);
-        }
         // Create and execute our query
         // Using parameterized queries (Prevents SQL injection attacks)
         const query1 = `CALL sp_CreateAlbum(?, ?, ?, ?, ?, @newID);`;

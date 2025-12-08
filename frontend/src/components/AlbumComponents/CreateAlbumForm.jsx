@@ -1,15 +1,18 @@
-/* Citations:
+/*
+   Citations:
    
-   Source: CS340 Modules/Explorations
-   Date: November 2025
-   Purpose: Form structure and state management patterns
-   Summary: Base form structure adapted from CS340 starter code.
-   Source URL: https://canvas.oregonstate.edu/courses/2017561/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25645149
+   Original Source: CS340 Course Template
+   Date: October-November 2025
+   Purpose: Base template for create forms with dropdown population
+   Source URL: https://canvas.oregonstate.edu/courses/2017561/pages/exploration-implementing-cud-operations-in-your-app
    
    AI Model: Claude 3.5 Sonnet
-   Date: 12/04/2025
-   Purpose: Made CreateAlbumForm functional with state management and backend integration
-   Summary: Implemented state management, form validation, genre dropdown, and submit handler that calls /Albums/create endpoint.
+   Date: 12/07/2025
+   Purpose: Updated Artist input to dropdown to prevent foreign key constraint errors
+   Summary: Changed artistID from text input to dropdown populated from Artists table.
+            Fetches both artists and genres on component mount. Dropdowns display just the
+            artistID and genreID values. Prevents users from entering invalid IDs that don't 
+            exist in the database.
    AI Source URL: https://claude.ai/
 */
 
@@ -24,8 +27,24 @@ const CreateAlbumForm = ({ backendURL, refreshAlbums }) => {
         genreID: ''
     });
 
+    const [artists, setArtists] = useState([]);
     const [genres, setGenres] = useState([]);
 
+    // Fetch artists on component mount
+    useEffect(() => {
+        async function fetchArtists() {
+            try {
+                const response = await fetch(`${backendURL}/Artists`);
+                const data = await response.json();
+                setArtists(data.artists || []);
+            } catch (error) {
+                console.error("Failed to fetch Artists", error);
+            }
+        }
+        fetchArtists();
+    }, [backendURL]);
+
+    // Fetch genres on component mount
     useEffect(() => {
         async function fetchGenres() {
             try {
@@ -64,7 +83,7 @@ const CreateAlbumForm = ({ backendURL, refreshAlbums }) => {
             });
 
             if (response.ok) {
-                console.log("Album created successfully.");
+                alert("Album created successfully!");
                 refreshAlbums();
                 // Reset form
                 setFormData({
@@ -75,10 +94,12 @@ const CreateAlbumForm = ({ backendURL, refreshAlbums }) => {
                     genreID: ''
                 });
             } else {
-                console.error("Error creating album.");
+                const errorData = await response.json();
+                alert(`Error creating album: ${errorData.error || 'Unknown error'}`);
             }
         } catch (error) {
             console.error('Error during form submission:', error);
+            alert(`Error creating album: ${error.message}`);
         }
     };
 
@@ -119,14 +140,20 @@ const CreateAlbumForm = ({ backendURL, refreshAlbums }) => {
                 />
 
                 <label htmlFor="artistID">Artist: </label>
-                <input
-                    type="text"
+                <select
                     name="artistID"
                     id="artistID"
                     value={formData.artistID}
                     onChange={handleChange}
                     required
-                />
+                >
+                    <option value="">Select an Artist</option>
+                    {artists.map((artist) => (
+                        <option value={artist.artistID} key={artist.artistID}>
+                            {artist.artistID}
+                        </option>
+                    ))}
+                </select>
 
                 <label htmlFor="genreID">Genre: </label>
                 <select

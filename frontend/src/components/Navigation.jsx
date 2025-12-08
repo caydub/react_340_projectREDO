@@ -1,4 +1,9 @@
-// This module adapted from the starter code provided in CS340 Modules/Explorations
+/* Citations:
+   
+   Source: CS340 Modules/Explorations
+   Date: November 2025
+   Summary: Navigation header adapted from CS340 starter code.
+*/
 
 function Navigation() {
     return (

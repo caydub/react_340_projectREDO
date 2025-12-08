@@ -16,8 +16,8 @@ import LineItems from "./pages/LineItems.jsx";
 import Navigation from './components/Navigation';
 
 // Define the backend port and URL for API requests
-// const backendPort = 59695;  // Use the port you assigned to the backend server, this would normally go in a .env file
-const backendPort = 55695;  // testing backend port
+const backendPort = 59695;  // Use the port you assigned to the backend server, this would normally go in a .env file
+// const backendPort = 55695;  // testing backend port
 const backendURL = `http://classwork.engr.oregonstate.edu:${backendPort}`;
 
 function App() {

@@ -203,7 +203,7 @@ BEGIN
         customerID int,
         PRIMARY KEY (albumRatingID),
         FOREIGN KEY (albumID) REFERENCES Albums(albumID)
-        ON DELETE NO ACTION,
+        ON DELETE CASCADE,
         FOREIGN KEY (customerID) REFERENCES Customers(customerID)
         ON DELETE CASCADE
     );
