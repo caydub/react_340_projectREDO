@@ -75,7 +75,7 @@ const CreateArtistForm = ({ backendURL, refreshArtists }) => {
             <h2>Create an Artist</h2>
 
             <form className='cuForm' onSubmit={handleSubmit}>
-                <label htmlFor="artistID">Artist ID: </label>
+                <label htmlFor="artistID">Artist: </label>
                 <input
                     type="text"
                     name="artistID"

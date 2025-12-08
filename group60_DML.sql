@@ -45,20 +45,18 @@ LEFT JOIN AlbumRatings ar ON a.albumID = ar.albumID
 GROUP BY a.albumID;
 
 -- get all artists to populate the Artist dropdown in CreateAlbumForm
--- Returns artistID and description (description fetched but only artistID displayed in dropdown)
-SELECT artistID, description FROM Artists;
+SELECT artistID FROM Artists;
 
 -- get all genres to populate the Genre dropdown in CreateAlbumForm
--- Returns genreID and description (description fetched but only genreID displayed in dropdown)
-SELECT genreID, description FROM Genres;
+SELECT genreID FROM Genres;
 
 -- add a new album
--- Called via stored procedure: CALL sp_CreateAlbum(@albumName, @albumPrice, @amountInStock, @artistID, @genreID);
+-- called via stored procedure: CALL sp_CreateAlbum(@albumName, @albumPrice, @amountInStock, @artistID, @genreID);
 INSERT INTO Albums (albumName, albumPrice, amountInStock, artistID, genreID)
 VALUES (@albumName, @albumPrice, @amountInStock, @artistID, @genreID);
 
 -- update an album based on submission of the Update Albums form
--- Called via stored procedure: CALL sp_UpdateAlbum(@albumID, @albumName, @albumPrice, @amountInStock, @artistID, @genreID);
+-- called via stored procedure: CALL sp_UpdateAlbum(@albumID, @albumName, @albumPrice, @amountInStock, @artistID, @genreID);
 -- Note: avgRating is NOT updated here as it's a calculated field from AlbumRatings table
 UPDATE Albums
 SET 
@@ -70,7 +68,7 @@ SET
 WHERE albumID = @albumID;
 
 -- delete an album
--- Called via stored procedure: CALL sp_DeleteAlbum(@albumID);
+-- called via stored procedure: CALL sp_DeleteAlbum(@albumID);
 -- CASCADE: This will also delete all AlbumRatings for this album (ON DELETE CASCADE)
 DELETE FROM Albums WHERE albumID = @albumID;
 
@@ -79,16 +77,16 @@ DELETE FROM Albums WHERE albumID = @albumID;
 ---                             |
 
 -- get all attributes for the List Artists page
--- Also used to populate Artist dropdown in CreateAlbumForm
-SELECT artistID, description FROM Artists;
+-- also used to populate Artist dropdown in CreateAlbumForm
+SELECT artistID FROM Artists;
 
 -- add a new artist
--- Called via stored procedure: CALL sp_CreateArtist(@artistID, @description);
+-- called via stored procedure: CALL sp_CreateArtist(@artistID, @description);
 INSERT INTO Artists (artistID, description)
 VALUES (@artistID, @description);
 
 -- update an artist based on submission of the Update Artists form
--- Called via stored procedure: CALL sp_UpdateArtist(@artistID, @newArtistID, @description);
+-- called via stored procedure: CALL sp_UpdateArtist(@artistID, @newArtistID, @description);
 UPDATE Artists
 SET artistID = @newArtistID, description = @description
 WHERE artistID = @artistID;
@@ -114,7 +112,7 @@ SELECT genreID, description FROM Genres;
 
 -- get all attributes for the List Customers page
 -- CONCAT displays customer name as single "First Last" field (no separate columns)
--- Frontend parses "First Last" back into firstName/lastName for UPDATE operations
+-- frontend parses "First Last" back into firstName/lastName for UPDATE operations
 SELECT 
     customerID, 
     CONCAT(firstName, ' ', lastName) AS customer, 
@@ -123,14 +121,13 @@ SELECT
 FROM Customers;
 
 -- add a new customer
--- Called via stored procedure: CALL sp_CreateCustomer(@firstName, @lastName, @phoneNumber, @email);
--- Frontend parses single name input "First Last" into @firstName and @lastName before calling
+-- called via stored procedure: CALL sp_CreateCustomer(@firstName, @lastName, @phoneNumber, @email);
 INSERT INTO Customers (firstName, lastName, phoneNumber, email)
 VALUES (@firstName, @lastName, @phoneNumber, @email);
 
 -- update a customer based on submission of the Update Customers form
--- Called via stored procedure: CALL sp_UpdateCustomer(@customerID, @firstName, @lastName, @phoneNumber, @email);
--- Frontend parses single name input "First Last" into @firstName and @lastName before calling
+-- called via stored procedure: CALL sp_UpdateCustomer(@customerID, @firstName, @lastName, @phoneNumber, @email);
+-- frontend parses single name input "First Last" into @firstName and @lastName before calling
 UPDATE Customers
 SET 
     firstName = @firstName,
@@ -161,9 +158,9 @@ INNER JOIN Customers ON AlbumRatings.customerID = Customers.customerID
 INNER JOIN Albums ON AlbumRatings.albumID = Albums.albumID;
 
 -- associate an album rating with a customer (M-to-M relationship addition)
--- Called via stored procedure: CALL sp_CreateAlbumRating(@albumName, @firstName, @lastName, @albumRating);
--- Uses natural key lookups: albumName → albumID, firstName/lastName → customerID
--- Frontend parses single customer name input "First Last" into @firstName and @lastName before calling
+-- called via stored procedure: CALL sp_CreateAlbumRating(@albumName, @firstName, @lastName, @albumRating);
+-- uses natural key lookups: albumName → albumID, firstName/lastName → customerID
+-- frontend parses single customer name input "First Last" into @firstName and @lastName before calling
 INSERT INTO AlbumRatings (albumID, customerID, albumRating)
 VALUES (
     (SELECT albumID FROM Albums WHERE albumName = @albumName),
@@ -172,9 +169,9 @@ VALUES (
 );
 
 -- update an AlbumRating based on submission of the Update AlbumRating form
--- Called via stored procedure: CALL sp_UpdateAlbumRating(@albumRatingID, @albumName, @firstName, @lastName, @albumRating);
--- Uses natural key lookups: albumName → albumID, firstName/lastName → customerID
--- Frontend parses single customer name input "First Last" into @firstName and @lastName before calling
+-- called via stored procedure: CALL sp_UpdateAlbumRating(@albumRatingID, @albumName, @firstName, @lastName, @albumRating);
+-- uses natural key lookups: albumName → albumID, firstName/lastName → customerID
+-- frontend parses single customer name input "First Last" into @firstName and @lastName before calling
 UPDATE AlbumRatings
 SET 
     albumRating = @albumRating, 
@@ -188,8 +185,8 @@ SET
 WHERE albumRatingID = @albumRatingID;
 
 -- delete an album rating (M:N relationship removal)
--- Called via stored procedure: CALL sp_DeleteAlbumRating(@albumRatingID);
--- Only removes the rating record, does NOT delete the album or customer
+-- called via stored procedure: CALL sp_DeleteAlbumRating(@albumRatingID);
+-- only removes the rating record, does NOT delete the album or customer
 DELETE FROM AlbumRatings WHERE albumRatingID = @albumRatingID;
 
 ---                             |
@@ -209,16 +206,15 @@ FROM Sales s
 LEFT JOIN Customers c ON s.customerID = c.customerID;
 
 -- add a new sale
--- Called via stored procedure: CALL sp_CreateSale(@customerID, @totalCost, @purchaseDate);
--- customerID can be NULL for anonymous sales
+-- called via stored procedure: CALL sp_CreateSale(@customerID, @totalCost, @purchaseDate);
 INSERT INTO Sales (customerID, totalCost, purchaseDate)
 VALUES (@customerID, @totalCost, @purchaseDate);
 
 -- update a sale based on submission of the Update Sales form
--- Called via stored procedure: CALL sp_UpdateSale(@salesID, @firstName, @lastName, @totalCost, @purchaseDate);
--- If @firstName and @lastName are provided: looks up customerID
--- If @firstName and @lastName are NULL/empty: sets customerID to NULL
--- Frontend sends NULL for anonymous sales or parsed firstName/lastName for customer lookup
+-- called via stored procedure: CALL sp_UpdateSale(@salesID, @firstName, @lastName, @totalCost, @purchaseDate);
+-- if @firstName and @lastName are provided: looks up customerID
+-- if @firstName and @lastName are NULL/empty: sets customerID to NULL
+-- frontend sends NULL for anonymous sales or parsed firstName/lastName for customer lookup
 UPDATE Sales
 SET 
     customerID = (
@@ -232,7 +228,7 @@ WHERE salesID = @salesID;
 
 -- Note: No DELETE operation for Sales (intentionally omitted for accounting preservation)
 
--- lookup lineitems for a sale, to be implemented when pushing Line Items button
+-- lookup lineitems for a sale, to be implemented when pushing Line Items button on sales page
 SELECT 
     lineItemID, 
     salesID, 
@@ -260,7 +256,7 @@ FROM LineItems
 INNER JOIN Albums ON LineItems.albumID = Albums.albumID;
 
 -- associate a sales line item with an album (M-to-M relationship addition)
--- Called via stored procedure: CALL sp_CreateLineItem(@salesID, @albumName, @quantity, @albumPrice);
+-- called via stored procedure: CALL sp_CreateLineItem(@salesID, @albumName, @quantity, @albumPrice);
 -- Uses natural key lookup: albumName → albumID
 -- albumPrice is captured at time of sale (historical price)
 INSERT INTO LineItems (salesID, albumID, albumPrice, quantity) 
@@ -272,8 +268,8 @@ VALUES (
 );
 
 -- update a lineItem based on submission of the Update Line Items form
--- Called via stored procedure: CALL sp_UpdateLineItem(@lineItemID, @salesID, @albumName, @quantity, @albumPrice);
--- Uses natural key lookup: albumName → albumID
+-- called via stored procedure: CALL sp_UpdateLineItem(@lineItemID, @salesID, @albumName, @quantity, @albumPrice);
+-- uses natural key lookup: albumName → albumID
 UPDATE LineItems
 SET 
     salesID = @salesID, 
@@ -283,6 +279,6 @@ SET
 WHERE lineItemID = @lineItemID;
 
 -- delete a line item (M:N relationship removal)
--- Called via stored procedure: CALL sp_DeleteLineItem(@lineItemID);
--- Only removes the line item record, does NOT delete the sale or album
+-- called via stored procedure: CALL sp_DeleteLineItem(@lineItemID);
+-- only removes the line item record, does NOT delete the sale or album
 DELETE FROM LineItems WHERE lineItemID = @lineItemID;
