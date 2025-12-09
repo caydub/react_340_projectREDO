@@ -141,7 +141,7 @@ const pool = mysql.createPool({
 ```bash
 cd Backend
 npm start
-# Server runs on port 55695
+# Server runs on port 59695
 ```
 
 7. **Start the frontend development server**
@@ -164,9 +164,7 @@ http://localhost:5173
 album-database/
 ├── Backend/
 │   ├── database/
-│   │   ├── db-connector.js          # Database connection pool
-│   │   ├── plsql.sql                # Stored procedures (18 procedures)
-│   │   └── group60_DML.sql          # SQL query documentation
+│   │   └── db-connector.js          # Database connection pool
 │   ├── server.js                    # Express server with 25+ routes
 │   └── package.json
 │
@@ -432,6 +430,7 @@ POST   /reset-database      - Reset database to sample data
 ## 📚 Documentation
 
 - `README.md` - This file
+- `Group60_Final_Submission` - Comprehensive pdf included in github repository
 
 ---
 
@@ -443,16 +442,14 @@ This project includes AI-assisted code. All AI usage is properly documented with
 - Source URLs
 - Inline citations in all affected files
 
-See `CS340_Step5_Final_Complete_Document.txt` Section 8 for complete citations.
-
 ---
 
 ## 👥 Team
 
 **Group 60**
 
-- **Caleb Richter** - Database design, stored procedures, frontend components
-- **Andrew Walsh** - Backend development, API routes, testing
+- **Caleb Richter** 
+- **Andrew Walsh**
 
 ---
 
@@ -462,8 +459,7 @@ See `CS340_Step5_Final_Complete_Document.txt` Section 8 for complete citations.
 - **Step 2** (10/30/2025) - Database schema and DDL
 - **Step 3** (11/13/2025) - DML and UI implementation
 - **Step 4** (11/20/2025) - CRUD operations and RESET
-- **Step 5** (12/04/2025) - Final implementation and documentation
-- **Final Updates** (12/07/2025) - Dropdown implementation, foreign key protection
+- **Step 5 and Final Updates** (12/04-08/2025) - Final implementation and documentation
 
 ---
 
@@ -480,7 +476,7 @@ See `CS340_Step5_Final_Complete_Document.txt` Section 8 for complete citations.
 
 ## 📝 License
 
-This project was created for academic purposes as part of CS 340 - Database Systems at Oregon State University.
+This project was created for academic purposes as part of CS 340 - Intro to Databases at Oregon State University.
 
 ---
 
@@ -494,15 +490,85 @@ This project was created for academic purposes as part of CS 340 - Database Syst
 
 ---
 
-## 📞 Contact
-
-For questions or issues, contact:
-- Caleb Richter - (email address)
-- Andrew Walsh - (email address)
-
-**Project Repository:** (repository URL if applicable)  
+**Project Repository:** https://github.com/caydub/react_340_dbms_project
 **Live Demo:** http://classwork.engr.oregonstate.edu:6896/
 
 ---
 
-*Last Updated: December 7, 2025*
+**Citations:**
+AI TOOL CITATIONS
+───────────────────────────────────────────────
+Citation 1
+AI Model: Claude AI
+Date: 11/13/2025
+Purpose: Updated TableRow.jsx and GenericUpdateButton.jsx with in-place editing functionality
+Prompts:
+  • Prompt 1: Implement an update button to make row values editable in place
+  • Prompt 2: Making first attribute/column non-editable
+Source URL: https://claude.ai
+
+Citation 2
+AI Tools: GitHub Copilot / ChatGPT
+Date: 11/06/2025
+Purpose: Debugging deprecated VITE version errors by analyzing console log errors. AI provided insight into pathing bug caused by old VITE version on engineering server, though solution required manual modification.
+
+Citation 3
+AI Model: ChatGPT
+Date: 11/13/2025
+Purpose: Generated 80s-themed template for index.css stylesheet, which was then modified
+Prompt: "Please make a globally style sheet for REACT index.css sheet that is 80s themed."
+Source URL: https://chatgpt.com
+
+Citation 4
+AI Model: Claude 3.5 Sonnet
+Date: 11/20/2025
+Purpose: Created delete functionality connecting React frontend to Node.js backend. Generated AlbumDeleteButton.jsx component, AlbumTableRow.jsx component, /Albums/delete route in server.js, and sp_DeleteAlbum stored procedure. Fixed routing issues causing NULL values.
+Source URL: https://claude.ai/
+
+Citation 5
+AI Model: Claude 3.5 Sonnet
+Date: 11/20/2025
+Purpose: Created database reset functionality. Generated ResetButton.jsx component with fetch request to backend /reset-database route, confirmation dialog, error handling, and callback for post-reset actions.
+Source URL: https://claude.ai/
+
+Citation 6
+AI Model: Claude 3.5 Sonnet
+Date: 11/20/2025
+Purpose: Integrated ResetButton component into Home page. Added import statement, backend URL configuration, callback handler, and positioned reset button at bottom of homepage.
+Source URL: https://claude.ai/
+
+Citation 7
+AI Model: Claude 3.5 Sonnet
+Date: 12/04/2025
+Purpose: Comprehensive implementation of remaining CRUD operations including Sales UPDATE, Albums avgRating calculation, Customer name parsing in locations, AlbumRatingTableRow.jsx, CreateAlbumRatingsForm.jsx, CustomerTableRow.jsx and CustomerUpdateButton.jsx updates, SalesUpdateButton.jsx, button styling consistency, SQL documentation, and DML query updates.Source URL: https://claude.ai/
+
+Citation 8
+AI Model: Claude 3.5 Sonnet
+Date: 12/07/2025
+Purpose: Updated CreateAlbumForm.jsx to use dropdown menus for Artist and Genre selection to prevent foreign key constraint errors. Updated group60_DML.sql documentation.
+Files Modified: Frontend/src/Components/AlbumComponents/CreateAlbumForm.jsx, Backend/database/group60_DML.sql
+Source URL: https://claude.ai/
+
+Citation 9
+AI Model: Claude 3.5 Sonnet (Claude Sonnet 4)
+Date: 12/08/2025
+Purpose: Created final submission documentation package including comprehensive Word document (Group60_Final_Submission.docx) with cover page, table of contents, executive summary, complete database outline for all entities, ERD and Schema sections with placeholders, formatted sample data tables, screenshot placeholders, and complete citations section. Updated README.md with all consolidated citations. Validated DML-to-stored procedures alignment across all entities. Fixed customer name validation bugs in CustomerUpdateButton.jsx and AlbumRatingTableRow.jsx requiring both first and last name. Identified  and resolved database reset error caused by customerID NOT NULL/ON DELETE SET NULL contradiction. Verified DDL-to-outline consistency and confirmed sample data accuracy. Created comprehensive submission guide with troubleshooting, screenshot best practices, and final checklist. Condensed executive summary to one-page format meeting submission requirements.Developed proper executive summary meeting assignment requirements: narrative format rather than changelog structure, comprehensive AI strengths/weaknesses analysis, reflection on how feedback influenced design decisions, and manager-level perspective. Condensed executive summary through multiple iterations to fit one-page requirement (~280 words final).
+ Files Created/Modified:
+  • Group60_Final_Submission.docx (complete submission document)
+  • README.md (updated with citations)
+  • CustomerUpdateButton.jsx (name validation fix)
+  • AlbumRatingTableRow.jsx (parameter passing fix)
+Source URL: https://claude.ai/
+
+NON-AI CITATIONS
+───────────────────────────────────────────────
+Citation 10
+Source: CS340 Modules/Explorations
+Date: November 2025
+Purpose: Utilized REACT template code and video walkthroughs for several of the generic 
+components/pages, CRUD operations, database connection, and project structure.
+Source URL: https://canvas.oregonstate.edu/courses/2017561/pages
+
+---
+
+*Last Updated: December 8, 2025*

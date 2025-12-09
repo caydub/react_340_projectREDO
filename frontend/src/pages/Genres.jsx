@@ -1,3 +1,12 @@
+/* Citations:
+   
+   Source: CS340 Modules/Explorations
+   Date: November 2025
+   Purpose: Page structure and data fetching patterns
+   Summary: Base page structure adapted from CS340 starter code.
+   Source URL: https://canvas.oregonstate.edu/courses/2017561
+*/
+
 import { useState, useEffect } from 'react';  // Importing useState for managing state in the component
 import TableRow from '../components/NakedTableRow';
 

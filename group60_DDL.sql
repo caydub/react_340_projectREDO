@@ -1,4 +1,5 @@
 -- Caleb Richter and Andrew Walsh Group 60
+-- 
 -- Tidying up the place
 SET FOREIGN_KEY_CHECKS=0;
 SET AUTOCOMMIT = 0;
